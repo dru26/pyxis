@@ -1,7 +1,19 @@
 # IO
 Basic button inputs and outputs, sonar implementation, and odometry implementations.
 
-## Method 
+## Method Detail
+| getDistance  |
+|--|
+| `float getDistance()` <br> Queries the current distance to the closest object. <br><br>  **Returns**  <br> The distance in cm to the nearest object detected by the on-board sonar. |
+
+| emergencyDistance  |
+|--|
+| `int emergencyDistance()` <br> Checks to see if there is an object within the emergency stopping distance of the robot. <br><br>  **Returns**  <br> The distance in cm before the robot reaches its e-stop distance. |
+
+| getPosition  |
+|--|
+| `Position getPosition()` <br> Queries the current position of the robot. <br><br>  **Returns** <br> The current Position of the robot's center. |
+
 | myMethod1  |
 |--|
 | `void myMethod1()` <br> A description of the method. |
