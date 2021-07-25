@@ -12,7 +12,7 @@ int main() {
 
 // implimentation of Dijkstra's algorithm
 void to(Position dest) {
-    start
+    start = a 
 
 
     std::priority_queue<Path> active;
