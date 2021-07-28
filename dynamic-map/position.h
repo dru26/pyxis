@@ -8,15 +8,22 @@ typedef std::pair<int, int> Position;
 //int x(const Position &p) { return p.first; }
 //int y(const Position &p) { return p.second; }
 
-std::pair<int, int> Pos(int x, int y) { return std::make_pair(x, y); }
+inline std::pair<int, int> Pos(int x, int y) { return std::make_pair(x, y); }
 
-std::ostream& operator<<(std::ostream& os, const Position& p) {
+inline std::ostream& operator<<(std::ostream& os, const Position& p) {
     return os << '(' << p.first << ", " << p.second << ')';
 }
 
-Position operator+(const Position& lhs, const Position& rhs) {
+inline Position operator+(const Position& lhs, const Position& rhs) {
     return std::make_pair(lhs.first + rhs.first, lhs.second + rhs.second);
 }
+
+inline int x(const Position& p) { return p.first; }
+inline int y(const Position& p) { return p.second; }
+inline void xi(Position& p) { ++p.first; }
+inline void yi(Position& p) { ++p.second; }
+inline void xd(Position& p) { --p.first; }
+inline void yd(Position& p) { --p.second; }
 
 /*
 // An immutable position containing an (x, y) pair

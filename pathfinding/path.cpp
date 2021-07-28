@@ -9,16 +9,6 @@
 
 Path getPath(ProbabilityMap p_map, Position dest);
 
-int main() {
-    ProbabilityMap pm(1);
-    Path p = getPath(pm, Pos(-10, -40));
-    for (int i = 0; i < p.size(); ++i) {
-        std::cout << p[i] << std::endl;
-    }
-
-    return EXIT_SUCCESS;
-}
-
 Position DIRECTIONS[4] = {Pos(0, 1), Pos(1, 0), Pos(0, -1), Pos(-1, 0)};
 
 // implimentation of Dijkstra's algorithm
