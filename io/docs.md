@@ -4,11 +4,19 @@ Basic button inputs and outputs, sonar implementation, and odometry implementati
 ## Method Detail
 | getDistance  |
 |--|
-| `float getDistance()` <br> Queries the current distance to the closest object. <br><br>  **Returns**  <br> The distance in cm to the nearest object detected by the on-board sonar. |
+| `float getDistance(str direction)` <br> Queries the current distance to the closest object. <br>
+direction argument should be "front", "back", "left", or "right" <br>
+<br>  **Returns**  <br> The distance in cm to the nearest object detected by the specified sonar. |
 
 | emergencyDistance  |
 |--|
 | `int emergencyDistance()` <br> Checks to see if there is an object within the emergency stopping distance of the robot. <br><br>  **Returns**  <br> The distance in cm before the robot reaches its e-stop distance. |
+
+| checkDistance |
+|--|
+| `bool checkDistance(str direction, int distance)` <br> Checks if the specified sonar senses an object within the specified range. <br>
+direction argument should be "front", "back", "left", or "right" <br>
+distance argument should be the threshold distance in cm <br><br> **Returns** <br> True if there is an object within range, False otherwise.
 
 | getPosition  |
 |--|
