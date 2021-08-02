@@ -2,6 +2,7 @@
 #define _position_h_
 
 #include <iostream>
+#include <math.h>
 
 typedef std::pair<int, int> Position;
 
@@ -16,6 +17,10 @@ inline std::ostream& operator<<(std::ostream& os, const Position& p) {
 
 inline Position operator+(const Position& lhs, const Position& rhs) {
     return std::make_pair(lhs.first + rhs.first, lhs.second + rhs.second);
+}
+
+inline Position cut(const Position& p, const unsigned int& scale) {
+    return std::make_pair(floor(p.first / scale), floor(p.second / scale));
 }
 
 inline int x(const Position& p) { return p.first; }

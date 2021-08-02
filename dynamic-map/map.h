@@ -7,7 +7,7 @@
 
 #include "position.h"
 
-typedef unsigned char Chance;
+typedef signed char Chance;
 
 // Grid with preallocated blocks
 class ProbabilityGrid {
@@ -23,7 +23,11 @@ public:
     float getProbability() { return _chance; }
     float getProbability(const Position& p);
     float getProbabilityArea(const Position& p1, const Position& p2);
+    // Modifoirs
+    void change(const Position& p, int delta);
 private:
+
+
     void _make(unsigned int size);
     Chance** _grid;
     unsigned int _size;
@@ -41,22 +45,24 @@ public:
     // Retrieves the areal calculation of chance
     float get(const Position &p);
     float getArea(const Position& center, int range);
-    int width() { return _xmax - _xmin; }
-    int height() { return _ymax - _ymin; }
+    void tell(const Position &p, bool is_blocked);
+    int width() { return (_xmax - _xmin) * this->_scale; }
+    int height() { return (_ymax - _ymin) * this->_scale; }
     int widtha() { return _layout.size(); }
     int heighta() { return _layout.size() ? _layout.front().size() : 0; }
-
-private:
-    void expand(const Position& p);
-    Position translate(const Position& p);
     int _xmin = 0;
     int _xmax = 0;
     int _ymin = 0;
     int _ymax = 0;
+private:
+    void expand(const Position& p);
+    Position translate(const Position& p);
+    Position trim(const Position& p, int scale);
+
     ProbabilityLayout _layout;
     ProbabilityGrid _default_grid;
     std::list<ProbabilityGrid> _default_grid_list;
-    unsigned int _scale;
+    int _scale;
 };
 
 #endif
