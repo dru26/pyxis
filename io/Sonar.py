@@ -35,5 +35,17 @@ def checkDistance(direction, distance):
 		else:
 			return False
 
-
+def emergencyDistance(direction, distance):
+	if (direction == "front"):
+		dist = sonar_front.distance*100
+		return (dist - distance)
+	if (direction == "back"):
+		dist = sonar_back.distance*100
+		return (dist - distance)
+	if (direction == "left"):
+		dist = sonar_left.distance*100
+		return (dist - distance)
+	if (direction == "right"):
+		dist = sonar_right.distance*100
+		return (dist - distance)
 

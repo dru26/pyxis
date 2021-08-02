@@ -10,11 +10,14 @@ direction argument should be "front", "back", "left", or "right" <br>
 
 | emergencyDistance  |
 |--|
-| `int emergencyDistance()` <br> Checks to see if there is an object within the emergency stopping distance of the robot. <br><br>  **Returns**  <br> The distance in cm before the robot reaches its e-stop distance. |
+| `int emergencyDistance(str direction, int distance)` <br> Checks to see how close an object is to the emergency stopping distance. <br>
+direction argument should be "front", "back", "left", or "right" <br>
+distance argument should be the threshold distance in cm
+<br><br>  **Returns**  <br> The distance in cm before the robot reaches its e-stop distance. |
 
 | checkDistance |
 |--|
-| `bool checkDistance(str direction, int distance)` <br> Checks if the specified sonar senses an object within the specified range. <br>
+| `bool checkDistance(str direction, int distance)` <br> Checks if the specified sonar senses an object within the specified distance. <br>
 direction argument should be "front", "back", "left", or "right" <br>
 distance argument should be the threshold distance in cm <br><br> **Returns** <br> True if there is an object within range, False otherwise.
 
