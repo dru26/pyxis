@@ -20,14 +20,12 @@ public:
     ProbabilityGrid(const ProbabilityGrid& pg) { this->_make(pg._size); }
     ~ProbabilityGrid();
     // Accessors
-    float getProbability() { return _chance; }
+    //float getProbabilityStashed() { return _chance; }
     float getProbability(const Position& p);
-    float getProbabilityArea(const Position& p1, const Position& p2);
-    // Modifoirs
+    float getProbabilityArea();
+    // Modifiers
     void change(const Position& p, int delta);
 private:
-
-
     void _make(unsigned int size);
     Chance** _grid;
     unsigned int _size;
@@ -38,13 +36,15 @@ typedef std::list<std::list<ProbabilityGrid>> ProbabilityLayout;
 
 // An 2D array storing the chance any given position will be blocked
 // The ideal size of a probability map is 1/2 the robot's width
+// THIS IS IMPORTANT, AS getBotArea() assumens this is the robots width and height
+// Thus, scale == 0.5 * width
 class ProbabilityMap {
 public:
     ProbabilityMap(unsigned int scale) : _scale(scale), _default_grid(scale) {}
     // Accessors
     // Retrieves the areal calculation of chance
     float get(const Position &p);
-    float getArea(const Position& center, int range);
+    float getBotArea(const Position& center);
     void tell(const Position &p, bool is_blocked);
     int width() { return (_xmax - _xmin) * this->_scale; }
     int height() { return (_ymax - _ymin) * this->_scale; }

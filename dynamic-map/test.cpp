@@ -110,7 +110,7 @@ void largeMapTests(int w, int h, int tests) {
     assert((map.width() == map.widtha() * 100) && (map.widtha() == w * 2));
     assert((map.height() == map.heighta() * 100) && (map.heighta() == h * 2));
 }
-
+/*
 int main() {
     // Run the basic test suite
     basicTests();
@@ -134,3 +134,4 @@ int main() {
     std::cout << "Completed large map (2x2) test" << std::endl;
     return EXIT_SUCCESS;
 }
+*/
