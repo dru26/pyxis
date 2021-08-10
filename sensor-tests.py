@@ -90,20 +90,20 @@ back_d = 0
 left_d = 0
 right_d = 0
 def left():
-	global sonar_left
+	global sonar_left, left_d
 	while True:
 		print("left")
 		left_d = str(sonar_left.value) + "m"
 def right():
-	global sonar_right
+	global sonar_right, right_d
 	while True:
 		right_d = str(sonar_right.value) + "m"
 def front():
-	global sonar_front
+	global sonar_front, front_d
 	while True:
 		front_d = str(sonar_front.value) + "m"
 def back():
-	global sonar_back
+	global sonar_back, back_d
 	while True:
 		back_d = str(sonar_front.value) + "m"
 
@@ -118,8 +118,8 @@ if __name__ == "__main__"
 	p4 = Process(target = back)
 	p4.start()
 
-	while True:
-		pass
+	#while True:
+	#	pass
 	# Create the window
 	window = sg.Window("Python ", layout)
 
