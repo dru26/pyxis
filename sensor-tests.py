@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
-import rio.pins
-from multiprocessing import Thread, Lock
+from rio.pins import sonar_right, sonar_back, sonar_left, sonar_front, LF_motor
+from rio.pins import RB_motor, LB_motor, RF_motor, ir_FL, ir_BL, ir_FR, ir_BR
+from rio.pins import power, table1, table2, table3, table4, table5, table6
+from multiprocessing import Process
 
 sg.theme('dark grey 9')
 
@@ -88,15 +90,19 @@ back_d = 0
 left_d = 0
 right_d = 0
 def left():
+	global sonar_left
 	while True:
-		left_d = str(sonar_front.value) + "m"
+		left_d = str(sonar_left.value) + "m"
 def right():
+	global sonar_right
 	while True:
-		right_d = str(sonar_front.value) + "m"
+		right_d = str(sonar_right.value) + "m"
 def front():
+	global sonar_front
 	while True:
 		front_d = str(sonar_front.value) + "m"
 def back():
+	global sonar_back
 	while True:
 		back_d = str(sonar_front.value) + "m"
 		
