@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from rio.pins import sonar_right, sonar_back, sonar_left, sonar_front, LF_motor
-from rio.pins import RB_motor, LB_motor, RF_motor, ir_FL, ir_BL, ir_FR, ir_BR
+from rio.pins import sonar_right, sonar_back, sonar_left, sonar_front, FL_motor
+from rio.pins import BR_motor, BL_motor, FR_motor, ir_FL, ir_BL, ir_FR, ir_BR
 from rio.pins import power, table1, table2, table3, table4, table5, table6
 from multiprocessing import Process
 
