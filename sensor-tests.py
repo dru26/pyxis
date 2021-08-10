@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from rio.pins import sonar_right, sonar_back, sonar_left, sonar_front, motor_FL
 from rio.pins import motor_BR, motor_BL, motor_FR, ir_FL, ir_BL, ir_FR, ir_BR
 from rio.pins import power, table1, table2, table3, table4, table5, table6
-from multiprocessing import Process
+from multiprocessing import Pool
 
 sg.theme('dark grey 9')
 
@@ -105,7 +105,7 @@ def back():
 	global sonar_back
 	while True:
 		back_d = str(sonar_front.value) + "m"
-		
+'''	
 p1 = Process(target = left)
 p1.start()
 p2 = Process(target = right)
@@ -114,6 +114,13 @@ p3 = Process(target = front)
 p3.start()
 p4 = Process(target = back)
 p4.start()
+'''
+
+pool = Pool()
+p1 = pool.apply_async(front)
+p2 = pool.apply_async(back)
+p3 = pool.apply_async(left)
+p4 = pool.apply_async(right)
 
 # Create the window
 window = sg.Window("Python ", layout)
