@@ -58,8 +58,11 @@ extern "C" void destructor(int* path) {
 }
 
 // implimentation of Dijkstra's algorithm
-extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, const char* path) {
+extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, int step, const char* path) {
     ProbabilityMap p_map(15);
+
+		// Transform the dest coords to a multiple of step from start
+		dest_x = start_x + (round((dest_x - start_x) / step) * step)
 
     loadTestMap(p_map, std::string(path));
     Position dest = Position(dest_x, dest_y);
@@ -99,9 +102,9 @@ extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, const 
         //std::cout << cur_dest << " " << dest << std::endl;
         // Look for a potential additive path in each of the 4 cardinal directions
         for (int i = 0; i < 4; ++i) {
-            if (finished.find(cur_dest + DIRECTIONS[i]) == finished.end()) {
+            if (finished.find(cur_dest + (DIRECTIONS[i] * step)) == finished.end()) {
                 new_path = min_path;
-                Position temp = cur_dest + DIRECTIONS[i];
+                Position temp = cur_dest + (DIRECTIONS[i] * step);
                 new_path.push_back(temp, p_map.getBotArea(temp));
                 active.push(new_path);
             }

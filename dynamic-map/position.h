@@ -28,6 +28,14 @@ inline Position operator+(const Position& lhs, const Position& rhs) {
     return std::make_pair(lhs.first + rhs.first, lhs.second + rhs.second);
 }
 
+inline Position operator*(const Position& lhs, int rhs) {
+    return std::make_pair(lhs.first * rhs, lhs.second * rhs);
+}
+
+inline Position operator*(int lhs, const Position& rhs) {
+    return std::make_pair(rhs.first * lhs, rhs.second * lhs);
+}
+
 inline Position cut(const Position& p, const unsigned int& scale) {
     return std::make_pair(floor(p.first / scale), floor(p.second / scale));
 }

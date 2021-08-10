@@ -2,12 +2,15 @@ from time import sleep
 import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import rio.pins
+from rio.pins import LF_motor, RB_motor, LB_motor, RF_motor, ir_FL, ir_BL, ir_FR, ir_BR
 
-# number of black lines on the wheel
-n = 4
+from multiprocessing import Thread, Lock
+ir_mutex = Lock()
+
+# number of white lines on the wheel
+n = 5
 # radius of the wheels in cm
-r = 5
+r = 4.8
 # k value of going forward
 k1 = 1
 # k value of going side to side
@@ -88,19 +91,43 @@ def turnleft(t, stop = True):
 		motor_stop()
 
 def getDistance(k):
-	global pi, r, n
+	global pi, r, n, ir_n
+	ir_mutex.aquire();
 	return ((2 * pi * r) / n) * k
 
-ir_old = ir.read()
-def updatePosition():
-	if (ir.read() < 0.5): # BLACK
-		if (ir_old > 0.5): # WHITE
-			return True
-	ir_old = ir.read()
-	return False
+ir_FL_old = ir_FL.read()
+ir_FR_old = ir_FR.read()
+ir_BL_old = ir_BL.read()
+ir_BR_old = ir_BR.read()
+ir_n = 0
+def monitorPosition():
+	while True:
+		global ir_FL_old, ir_FR_old, ir_BL_old, ir_BR_old, ir_n
+		ir_mutex.acquire()
+		if (ir_FL.read() < 0.5): # BLACK
+			if (ir_FL_old > 0.5): # WHITE
+				ir_n += 0.25
+				print("FL Moved")
+		if (ir_FR.read() < 0.5): # BLACK
+			if (ir_FR_old > 0.5): # WHITE
+				ir_n += 0.25
+				print("FR Moved")
+		if (ir_BL.read() < 0.5): # BLACK
+			if (ir_BL_old > 0.5): # WHITE
+				ir_n += 0.25
+				print("BL Moved")
+		if (ir_BR.read() < 0.5): # BLACK
+			if (ir_BR_old > 0.5): # WHITE
+				ir_n += 0.25
+				print("BR Moved")
+		ir_mutex.release()
+		ir_FL_old = ir_FL.read()
+		ir_FR_old = ir_FR.read()
+		ir_BL_old = ir_BL.read()
+		ir_BR_old = ir_BR.read()
 
 '''
-check if new_position.x - current_position.x + new_position.y - current_position.y = 1
+check if new_position[0] - current_position[0] + new_position[1] - current_position[1] = 1
 '''
 def moveTo(new_position):
 	global current_position
@@ -109,58 +136,61 @@ def moveTo(new_position):
 	(since we can assume that each position is 1cm apart in a cardinal direction)
 	'''
 	if MODE == "VELOCITY":
-		if new_position.x - current_position.x == 1:
+		if new_position[0] - current_position[0] == 1:
 			forward(1/VELOCITY)
-			current_position.x += 1
+			current_position[0] += 1
 			return
-		if new_position.x - current_position.x == -1:
+		if new_position[0] - current_position[0] == -1:
 			backward(1/VELOCITY)
-			current_position.x -= 1
+			current_position[0] -= 1
 			return
-		if new_position.y - current_position.y == 1:
+		if new_position[1] - current_position[1] == 1:
 			right(1/VELOCITY)
-			current_position.y += 1
+			current_position[1] += 1
 			return
-		if new_position.y - current_position.y == -1:
+		if new_position[1] - current_position[1] == -1:
 			left(1/VELOCITY)
-			current_position.y -= 1
+			current_position[1] -= 1
 			return
 	'''Use odometry to determine where we are'''
 	if MODE == "IR":
 		distance = 0
-		if new_position.x - current_position.x > 0:
+		if new_position[0] - current_position[0] > 0:
 			while distance < 1:
 				forward(0, False)
 				# Loop
-				while not updatePosition():
+				while ir_n < 1:
 					pass
+				motor_stop()
 				distance += getDistance(k1)
-			motor_stop()
-			current_position.x += distance
-		elif new_position.x - current_position.x < 0:
+			current_position[0] += distance
+		elif new_position[0] - current_position[0] < 0:
 			while distance < 1:
 				backward(0, False)
 				# Loop
-				while not updatePosition():
+				while ir_n < 1:
 					pass
+				motor_stop()
 				distance += getDistance(k1)
-			motor_stop()
-			current_position.x -= distance
-		elif new_position.y - current_position.y > 0:
+			current_position[0] -= distance
+		elif new_position[1] - current_position[1] > 0:
 			while distance < 1:
 				right(0, False)
 				# Loop
-				while not updatePosition():
+				while ir_n < 1:
 					pass
+				motor_stop()
 				distance += getDistance(k2)
-			motor_stop()
-			current_position.y += distance
-		elif new_position.y - current_position.y < 0:
+			current_position[1] += distance
+		elif new_position[1] - current_position[1] < 0:
 			while distance < 1:
 				left(0, False)
 				# Loop
-				while not updatePosition():
+				while ir_n < 1:
 					pass
+				motor_stop()
 				distance += getDistance(k2)
-			motor_stop()
-			current_position.y -= distance
+			current_position[1] -= distance
+
+p = Process(target = monitorPosition)
+p.start()

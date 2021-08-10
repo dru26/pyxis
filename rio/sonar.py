@@ -1,7 +1,9 @@
 #Pyxis sonar-driver code
 #Written by Zackary Kattermann
+from multiprocessing import Thread, Lock
+from pins import sonar_right, sonar_back, sonar_left, sonar_front
 
-import io
+ESTOP = True
 
 def getDistance(direction):
 	if (direction == "front"):
@@ -48,4 +50,3 @@ def emergencyDistance(direction, distance):
 	if (direction == "right"):
 		dist = sonar_right.distance*100
 		return (dist - distance)
-

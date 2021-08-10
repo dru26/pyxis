@@ -35,7 +35,7 @@ def _destroy(path):
     clib.destructor(path)
 
 clib.getPath.restype = ctypes.POINTER(ctypes.c_int)
-clib.getPath.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_wchar_p)
+clib.getPath.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_wchar_p)
 def findPath(start, end):
     global PATH
     print(str(pathlib.Path().absolute() / "examples/maps/basic.txt"))
