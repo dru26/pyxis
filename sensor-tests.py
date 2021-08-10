@@ -92,8 +92,10 @@ right_d = 0
 def left():
 	global sonar_left, left_d
 	while True:
-		print("left")
-		left_d = str(sonar_left.value) + "m"
+		print("left queue:")
+		print(sonar_left._queue)
+		if sonar_left._queue != None:
+			left_d = str(sonar_left.value) + "m"
 def right():
 	global sonar_right, right_d
 	while True:
@@ -108,7 +110,7 @@ def back():
 		back_d = str(sonar_front.value) + "m"
 
 
-if __name__ == "__main__"
+if __name__ == "__main__":
 	p1 = Process(target = left)
 	p1.start()
 	p2 = Process(target = right)
