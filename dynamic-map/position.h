@@ -6,6 +6,15 @@
 
 typedef std::pair<int, int> Position;
 
+extern "C" bool isPositionLoaded() {
+  return true;
+}
+
+extern "C" void positionTest(int* pos) {
+  pos[0] = 2;
+  pos[1] = 300;
+}
+
 //int x(const Position &p) { return p.first; }
 //int y(const Position &p) { return p.second; }
 

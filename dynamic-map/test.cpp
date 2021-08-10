@@ -40,29 +40,29 @@ void continuityTest() {
     // Scale of 0.5 m
     ProbabilityMap map(2);
     // Add the gradient
-    map.tell(Position(-1, 0), false);
-    map.tell(Position(0, 0), false);
-    map.tell(Position(0, 0), false);
-    map.tell(Position(1, 0), false);
-    map.tell(Position(1, 0), false);
-    map.tell(Position(1, 0), false);
-    map.tell(Position(-1, -1), false);
-    map.tell(Position(-1, -1), false);
-    map.tell(Position(0, -1), false);
-    map.tell(Position(0, -1), false);
-    map.tell(Position(0, -1), false);
-    map.tell(Position(1, -1), false);
-    map.tell(Position(1, -1), false);
-    map.tell(Position(1, -1), false);
-    map.tell(Position(1, -1), false);
+    map.tell(Position(-1, 0), true);
+    map.tell(Position(0, 0), true);
+    map.tell(Position(0, 0), true);
+    map.tell(Position(1, 0), true);
+    map.tell(Position(1, 0), true);
+    map.tell(Position(1, 0), true);
+    map.tell(Position(-1, -1), true);
+    map.tell(Position(-1, -1), true);
+    map.tell(Position(0, -1), true);
+    map.tell(Position(0, -1), true);
+    map.tell(Position(0, -1), true);
+    map.tell(Position(1, -1), true);
+    map.tell(Position(1, -1), true);
+    map.tell(Position(1, -1), true);
+    map.tell(Position(1, -1), true);
     // Make sure the graident makes sense
     //std::cout << "get(-1,0): " << map.get(Position(-1, 0)) << std::endl;
-    assert(abs(map.get(Position(-1, 0)) - (1.0 / 127.0)) < PRECISION);
-    assert(abs(map.get(Position(0, 0)) - (2.0 / 127.0)) < PRECISION);
-    assert(abs(map.get(Position(-1, -1)) - (2.0 / 127.0)) < PRECISION);
-    assert(abs(map.get(Position(1, 0)) - (3.0 / 127.0)) < PRECISION);
-    assert(abs(map.get(Position(0, -1)) - (3.0 / 127.0)) < PRECISION);
-    assert(abs(map.get(Position(1, -1)) - (4.0 / 127.0)) < PRECISION);
+    assert(abs(map.get(Position(-1, 0)) - pow(1.0 / 127.0, 2)) < PRECISION);
+    assert(abs(map.get(Position(0, 0)) - pow(2.0 / 127.0, 2)) < PRECISION);
+    assert(abs(map.get(Position(-1, -1)) - pow(2.0 / 127.0, 2)) < PRECISION);
+    assert(abs(map.get(Position(1, 0)) - pow(3.0 / 127.0, 2)) < PRECISION);
+    assert(abs(map.get(Position(0, -1)) - pow(3.0 / 127.0, 2)) < PRECISION);
+    assert(abs(map.get(Position(1, -1)) - pow(4.0 / 127.0, 2)) < PRECISION);
     // Make sure the map size makes sense
     assert((map.width() == map.widtha() * 2) && (map.width() == 4));
     assert((map.height() == map.heighta() * 2) && (map.height() == 4));
@@ -94,15 +94,15 @@ void largeMapTests(int w, int h, int tests) {
         random_pos.push_back(Pos(x, y));
         random_int.push_back(r);
     } for (int i = 0; i < tests; i++) {
-        std::cout << "pos: " << random_pos[i] << std::endl;
+        //std::cout << "pos: " << random_pos[i] << std::endl;
         // Simulate multiple blockages or clearances
         for (int r = 0; r < random_int[i]; ++r) {
-            map.tell(random_pos[i], false);
+            map.tell(random_pos[i], true);
         }
-        assert(abs(map.get(random_pos[i]) - (abs((float)random_int[i]) / 127.0)) < PRECISION);
+        assert(abs(map.get(random_pos[i]) - pow(abs((float)random_int[i]) / 127.0, 2)) < PRECISION);
         // Clean those blockages out by doing the reverse
         for (int r = 0; r < random_int[i]; ++r) {
-            map.tell(random_pos[i], true);
+            map.tell(random_pos[i], false);
         }
         assert(map.get(random_pos[i]) == 0.0);
     }
@@ -110,15 +110,18 @@ void largeMapTests(int w, int h, int tests) {
     assert((map.width() == map.widtha() * 100) && (map.widtha() == w * 2));
     assert((map.height() == map.heighta() * 100) && (map.heighta() == h * 2));
 }
-/*
+
 int main() {
+    loadTestMap("map.txt", 15);
+    std::cout << "Loaded a p_map" << std::endl;
     // Run the basic test suite
     basicTests();
     std::cout << "Completed basic tests" << std::endl;
     // Run the continuity test
     continuityTest();
+
     // Run large maps with spot tests
-    largeMapTests(100, 100, 200);
+    largeMapTests(100, 100, 200);/*
     std::cout << "Completed large map (100x100) test" << std::endl;
     largeMapTests(312, 2, 2000);
     std::cout << "Completed large map (312x2) test" << std::endl;
@@ -131,7 +134,10 @@ int main() {
     largeMapTests(350, 400, 2000);
     std::cout << "Completed large map (350x400) test" << std::endl;
     largeMapTests(2, 2, 100000);
-    std::cout << "Completed large map (2x2) test" << std::endl;
+    std::cout << "Completed large map (2x2) test" << std::endl;*/
     return EXIT_SUCCESS;
 }
-*/
+
+int test(int n, float x) {
+  return 1;
+}

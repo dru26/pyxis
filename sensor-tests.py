@@ -1,7 +1,5 @@
-# hello_psg.py
-
 import PySimpleGUI as sg
-import io
+import rio.pins
 
 sg.theme('dark grey 9')
 
@@ -89,32 +87,32 @@ window = sg.Window("Python ", layout)
 
 # Create an event loop
 while True:
-    event, values = window.read()
+    event, values = window.read(1000)
     # Read Motor button presses
     if event == "BL Motor Power (Forward)":
         motor_BL.forward()
-    else if event == "BL Motor Power (Backward)":
+    elif event == "BL Motor Power (Backward)":
         motor_BL.backward()
     else:
         motor_BL.stop()
 
     if event == "FL Motor Power (Forward)":
         motor_FL.forward()
-    else if event == "FL Motor Power (Backward)":
+    elif event == "FL Motor Power (Backward)":
         motor_FL.backward()
     else:
         motor_FL.stop()
 
     if event == "BR Motor Power (Forward)":
         motor_BR.forward()
-    else if event == "BR Motor Power (Backward)":
+    elif event == "BR Motor Power (Backward)":
         motor_BR.backward()
     else:
         motor_BR.stop()
 
     if event == "FR Motor Power (Forward)":
         motor_FR.forward()
-    else if event == "FR Motor Power (Backward)":
+    elif event == "FR Motor Power (Backward)":
         motor_FR.backward()
     else:
         motor_FR.stop()
@@ -142,7 +140,7 @@ while True:
     window["-M1-"].update(str(motor_FL.value))
     window["-M2-"].update(str(motor_FR.value))
     window["-M3-"].update(str(motor_BL.value))
-    window["-M4-"].update(str(motor_BL.value))
+    window["-M4-"].update(str(motor_BR.value))
 
     # Update the Sonar values
     window["-S1-"].update(str(sonar_front.value) + "m")
