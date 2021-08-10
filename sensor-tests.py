@@ -118,6 +118,8 @@ if __name__ == "__main__"
 	p4 = Process(target = back)
 	p4.start()
 
+	while True:
+		pass
 	# Create the window
 	window = sg.Window("Python ", layout)
 
