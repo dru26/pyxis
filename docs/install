@@ -1,0 +1,3 @@
+# pip
+sudo pip install gpiozero
+sudo pip install PySimpleGUI
