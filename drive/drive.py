@@ -61,6 +61,7 @@ power.when_pressed = on
 power.when_released = off
 
 def motor_stop():
+	global DIRECTION
 	print("Motor stop!")
 	motor_FL.stop()
 	motor_BR.stop()
@@ -69,6 +70,7 @@ def motor_stop():
 	DIRECTION = None
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
+	global DIRECTION
 	DIRECTION = FORWARD
 	print("Motor forward!")
 	if not ESTOP and POWER:
@@ -81,6 +83,7 @@ def forward(t, stop = True): # k is the time the robot will move in seconds
 		motor_stop()
 
 def backward(t, stop = True):
+	global DIRECTION
 	print("Motor backward!")
 	DIRECTION = BACKWARD
 	if not ESTOP and POWER:
@@ -93,6 +96,7 @@ def backward(t, stop = True):
 		motor_stop()
 
 def left(t, stop = True):
+	global DIRECTION
 	print("Motor left!")
 	DIRECTION = LEFT
 	if not ESTOP and POWER:
@@ -105,6 +109,7 @@ def left(t, stop = True):
 		motor_stop()
 
 def right(t, stop = True):
+	global DIRECTION
 	print("Motor right!")
 	DIRECTION = RIGHT
 	if not ESTOP and POWER:
