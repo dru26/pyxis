@@ -62,7 +62,7 @@ extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, int st
     ProbabilityMap p_map(15);
 
 		// Transform the dest coords to a multiple of step from start
-		dest_x = start_x + (round((dest_x - start_x) / step) * step)
+		dest_x = start_x + (round((dest_x - start_x) / step) * step);
 
     loadTestMap(p_map, std::string(path));
     Position dest = Position(dest_x, dest_y);
