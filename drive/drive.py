@@ -8,9 +8,19 @@ from rio.pins import table1 as bforward
 from rio.pins import table2 as bbackward
 from rio.pins import table3 as bleft
 from rio.pins import table4 as bright
+from bindings import hasPosition, fail
 
 from multiprocessing import Lock
 ir_mutex = Lock()
+
+DIRECTION = None
+
+LEFT = 0
+RIGHT = 1
+FORWARD = 2
+BACKWARD = 3
+
+STEP = 5
 
 # number of white lines on the wheel
 n = 5
@@ -20,15 +30,21 @@ r = 4.8
 k1 = 1
 # k value of going side to side
 k2 = 0.45
+	
+LEFT = 0
+RIGHT = 1
+FORWARD = 2
+BACKWARD = 3
 
-ESTOP = False;
-POWER = False;
+ESTOP = False
+POWER = False
 MODE = "IR"
 #MODE = "VELOCITY"
 
 SPEED = 0.2
+DELTA = (1/SPEED) * STEP
 
-current_position = (0, 0)
+CURRENT_POSITION = (0, 0)
 
 def off():
 	POWER = False
@@ -44,8 +60,10 @@ def motor_stop():
 	RB_motor.stop()
 	LB_motor.stop()
 	RF_motor.stop()
+	DIRECTION = None
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
+	DIRECTION = FORWARD
 	if not ESTOP and POWER:
 		LF_motor.forward()
 		RB_motor.forward()
@@ -56,6 +74,7 @@ def forward(t, stop = True): # k is the time the robot will move in seconds
 		motor_stop()
 
 def backward(t, stop = True):
+	DIRECTION = BACKWARD
 	if not ESTOP and POWER:
 		LF_motor.backward()
 		RB_motor.backward()
@@ -66,6 +85,7 @@ def backward(t, stop = True):
 		motor_stop()
 
 def left(t, stop = True):
+	DIRECTION = LEFT
 	if not ESTOP and POWER:
 	    LF_motor.forward()
 	    RB_motor.forward()
@@ -76,6 +96,7 @@ def left(t, stop = True):
 		motor_stop()
 
 def right(t, stop = True):
+	DIRECTION = RIGHT
 	if not ESTOP and POWER:
 		LF_motor.backward()
 		RB_motor.backward()
@@ -106,82 +127,97 @@ def turnleft(t, stop = True):
 		motor_stop()
 
 def getDistance(k):
-	global pi, r, n, ir_n
-	ir_mutex.aquire();
+	global pi, r, n
 	return ((2 * pi * r) / n) * k
 
+ir_n = 0
+def flushIR():
+	global ir_mutex, ir_n, CURRENT_POSITION, TARGET_X, TARGET_Y
+	ir_mutex.acquire()
+	if DIRECTION == FORWARD:
+		CURRENT_POSITION[0] += ir_n * getDistance(k1)
+	elif DIRECTION == BACKWARD:
+		CURRENT_POSITION[0] -= ir_n * getDistance(k1)
+	elif DIRECTION == RIGHT:
+		CURRENT_POSITION[1] += ir_n * getDistance(k2)
+	elif DIRECTION == LEFT:
+		CURRENT_POSITION[1] -= ir_n * getDistance(k2)
+	else:
+		print("Something went terribly, terribly wrong here :(")
+	ir_n = 0
+	ir_mutex.release()
+
+def checkDirection(pos):
+	if pos[0] - round(CURRENT_POSITION[0]) > 0:
+		return FORWARD
+	if pos[0] - round(CURRENT_POSITION[0]) < 0:
+		return BACKWARD
+	if pos[1] - round(CURRENT_POSITION[1]) > 0:
+		return RIGHT
+	if pos[1] - round(CURRENT_POSITION[1]) < 0:
+		return LEFT
+
 '''
-check if new_position[0] - current_position[0] + new_position[1] - current_position[1] = 1
+check if new_position[0] - CURRENT_POSITION[0] + new_position[1] - CURRENT_POSITION[1] = 1
 '''
 def moveTo(new_position):
-	global current_position
+	global CURRENT_POSITION
 	'''
 	if the speed of the motor is 0.2cm/s, we can just let motor move 5 seconds to reach the destination
 	(since we can assume that each position is 1cm apart in a cardinal direction)
 	'''
 	if MODE == "VELOCITY":
-		if new_position[0] - current_position[0] == 1:
-			forward(1/VELOCITY)
-			current_position[0] += 1
+		if checkDirection(new_position) == FORWARD:
+			forward(DELTA)
 			return
-		if new_position[0] - current_position[0] == -1:
-			backward(1/VELOCITY)
-			current_position[0] -= 1
+		if checkDirection(new_position) == BACKWARD:
+			backward(DELTA)
 			return
-		if new_position[1] - current_position[1] == 1:
-			right(1/VELOCITY)
-			current_position[1] += 1
+		if checkDirection(new_position) == RIGHT:
+			right(DELTA)
 			return
-		if new_position[1] - current_position[1] == -1:
-			left(1/VELOCITY)
-			current_position[1] -= 1
+		if checkDirection(new_position) == LEFT:
+			left(DELTA)
 			return
 	'''Use odometry to determine where we are'''
 	if MODE == "IR":
-		distance = 0
-		if new_position[0] - current_position[0] > 0:
-			while distance < 1:
-				forward(0, False)
-				# Loop
-				while ir_n < 1:
-					pass
-				motor_stop()
-				distance += getDistance(k1)
-			current_position[0] += distance
-		elif new_position[0] - current_position[0] < 0:
-			while distance < 1:
-				backward(0, False)
-				# Loop
-				while ir_n < 1:
-					pass
-				motor_stop()
-				distance += getDistance(k1)
-			current_position[0] -= distance
-		elif new_position[1] - current_position[1] > 0:
-			while distance < 1:
-				right(0, False)
-				# Loop
-				while ir_n < 1:
-					pass
-				motor_stop()
-				distance += getDistance(k2)
-			current_position[1] += distance
-		elif new_position[1] - current_position[1] < 0:
-			while distance < 1:
-				left(0, False)
-				# Loop
-				while ir_n < 1:
-					pass
-				motor_stop()
-				distance += getDistance(k2)
-			current_position[1] -= distance
-
+		start_x = CURRENT_POSITION[0]
+		start_y = CURRENT_POSITION[1]
+		if checkDirection(new_position) == FORWARD:
+			forward(0, False)
+			while abs(start_x - CURRENT_POSITION[0]) < STEP: 
+				if ESTOP or POWER:
+					return False
+			motor_stop()
+			distance += getDistance(k1)
+		elif checkDirection(new_position) == BACKWARD:
+			backward(0, False)
+			while abs(start_x - CURRENT_POSITION[0]) < STEP:
+				if ESTOP or POWER:
+					return False
+			motor_stop()
+			distance += getDistance(k1)
+		elif checkDirection(new_position) == RIGHT:
+			right(0, False)
+			while abs(start_y - CURRENT_POSITION[1]) < STEP:
+				if ESTOP or POWER:
+					return False
+			motor_stop()
+			distance += getDistance(k2)
+		elif checkDirection(new_position) == LEFT:
+			right(0, False)
+			while abs(start_y - CURRENT_POSITION[1]) < STEP:
+				if ESTOP or POWER:
+					return False
+			motor_stop()
+			distance += getDistance(k2)
+	return True
 
 # Button control
-bforward.when_pressed = lambda: forward(0, False)
-bbackward.when_pressed = lambda: backward(0, False)
-bleft.when_pressed = lambda: left(0, False)
-bright.when_pressed = lambda: right(0, False)
+bforward.when_pressed = lambda: forward(1)
+bbackward.when_pressed = lambda: backward(1)
+bleft.when_pressed = lambda: left(1)
+bright.when_pressed = lambda: right(1)
 bforward.when_released = motor_stop
 bbackward.when_released = motor_stop
 bleft.when_released = motor_stop
@@ -200,28 +236,25 @@ def estop(sonarDirection, sonar):
 		else:
 			ESTOP = False
 		
-
-
-
 def unestop():
 	ESTOP = False
 
-sonar_right.when_in_range = estop()
-sonar_right.when_out_of_range = unestop()
-sonar_back.when_in_range = estop()
-sonar_back.when_out_of_range = unestop()
-sonar_left.when_in_range = estop()
-sonar_left.when_out_of_range = unestop()
-sonar_front.when_in_range = estop()
-sonar_front.when_out_of_range = unestop()
-
-ir_n = 0
+sonar_right.when_in_range = lambda: estop(RIGHT, sonar_right)
+sonar_right.when_out_of_range = lambda: unestop(RIGHT, sonar_right)
+sonar_back.when_in_range = lambda: estop(BACKWARD, sonar_back)
+sonar_back.when_out_of_range = lambda: unestop(BACKWARD, sonar_back)
+sonar_left.when_in_range = lambda: estop(LEFT, sonar_left)
+sonar_left.when_out_of_range = lambda: unestop(LEFT, sonar_left)
+sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
+sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
 def triggerIR():
 	global ir_n
 	ir_mutex.acquire()
 	ir_n += 0.25
 	ir_mutex.release()
+	if ir_n >= 1:
+		flushIR()
 
 ir_FL.when_line = triggerIR
 ir_FR.when_line = triggerIR
