@@ -1,4 +1,4 @@
-motor_FRfrom time import sleep
+from time import sleep
 import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
