@@ -264,13 +264,14 @@ sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
 sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
 def triggerIR():
-	print("IR Line detected")
+	print("IR Line detected; moving from", CURRENT_POSITION, "...")
 	global ir_n
 	ir_mutex.acquire()
 	ir_n += 0.25
 	ir_mutex.release()
 	if ir_n >= 1:
 		flushIR()
+		print("    Now at ", CURRENT_POSITION)
 
 ir_FL.when_line = triggerIR
 ir_FR.when_line = triggerIR
