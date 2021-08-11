@@ -1,6 +1,6 @@
 import drive
-from drive import POWER
 import sonar
+from drive import ESTOP
 from time import sleep
 from rio import power as power_b
 from rio import table1 as forward_b
@@ -14,19 +14,22 @@ from rio import table6 as table_b
 
 Position table_position
 flag = False
-state = 0;
+state = 0
 While True:
 
 	if state == 0: #waiting state
 		table_b.wait_for_press()
-		findPath(current_position, destination)
+		findPath(drive.CURRENT_POSITION, table_position)
 		state = 1
 	if state == 1: #move towards destination
 		while hasPosition():
-			if !(power_b.is_pressed()):
-				POWER = True
-			else:
-				POWER = False
+			if ESTOP:
+				sleep(1)
+				if ESTOP:
+					sleep(1)
+				else:
+					
+
 			next_position = nextPosition()
 
 			drive.moveto(next_position)

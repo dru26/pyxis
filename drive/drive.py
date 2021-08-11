@@ -188,9 +188,20 @@ bleft.when_released = motor_stop
 bright.when_released = motor_stop
 
 # Monitors
-def estop():
-	ESTOP = True
-	motor_stop()
+def estop(sonarDirection, sonar):
+	global ESTOP
+	if sonarDirection == DIRECTION:
+		ESTOP = True
+		sleep(3)
+		if sonar.distance < sonar.threshold_distance:
+			if hasPosition():
+				fail(DIRECTION, sonar.distance)
+			motor_stop()
+		else:
+			ESTOP = False
+		
+
+
 
 def unestop():
 	ESTOP = False
