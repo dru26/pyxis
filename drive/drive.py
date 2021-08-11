@@ -2,7 +2,7 @@ from time import sleep
 import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from rio.pins import LF_motor, RB_motor, LB_motor, RF_motor, ir_FL, ir_BL, ir_FR, ir_BR
+from rio.pins import motor_FL, motor_FR, motor_BL, motor_BR, ir_FL, ir_BL, ir_FR, ir_BR
 from rio.pins import power
 from rio.pins import table1 as bforward
 from rio.pins import table2 as bbackward
@@ -56,19 +56,19 @@ power.when_pressed = on
 power.when_released = off
 
 def motor_stop():
-	LF_motor.stop()
-	RB_motor.stop()
-	LB_motor.stop()
-	RF_motor.stop()
+	motor_LF.stop()
+	motor_BR.stop()
+	motor_BL.stop()
+	motor_FR.stop()
 	DIRECTION = None
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
 	DIRECTION = FORWARD
 	if not ESTOP and POWER:
-		LF_motor.forward()
-		RB_motor.forward()
-		LB_motor.forward()
-		RF_motor.forward()
+		motor_FL.forward()
+		motor_BR.forward()
+		motor_BL.forward()
+		motor_FR.forward()
 	if stop or ESTOP:
 		sleep(t) # the waiting time need to be tested
 		motor_stop()
@@ -76,10 +76,10 @@ def forward(t, stop = True): # k is the time the robot will move in seconds
 def backward(t, stop = True):
 	DIRECTION = BACKWARD
 	if not ESTOP and POWER:
-		LF_motor.backward()
-		RB_motor.backward()
-		LB_motor.backward()
-		RF_motor.backward()
+		motor_FL.backward()
+		motor_BR.backward()
+		motor_BL.backward()
+		motor_FR.backward()
 	if stop or ESTOP:
 		sleep(t) # the waiting time need to be tested
 		motor_stop()
@@ -87,10 +87,10 @@ def backward(t, stop = True):
 def left(t, stop = True):
 	DIRECTION = LEFT
 	if not ESTOP and POWER:
-	    LF_motor.forward()
-	    RB_motor.forward()
-	    LB_motor.backward()
-	    RF_motor.backward()
+	    motor_FL.forward()
+	    motor_BR.forward()
+	    motor_BL.backward()
+	    motor_FR.backward()
 	if stop or ESTOP:
 		sleep(t) # the waiting time need to be tested
 		motor_stop()
@@ -98,30 +98,30 @@ def left(t, stop = True):
 def right(t, stop = True):
 	DIRECTION = RIGHT
 	if not ESTOP and POWER:
-		LF_motor.backward()
-		RB_motor.backward()
-		LB_motor.forward()
-		RF_motor.forward()
+		motor_FL.backward()
+		motor_BR.backward()
+		motor_BL.forward()
+		motor_FR.forward()
 	if stop or ESTOP:
 		sleep(t) # the waiting time need to be tested
 		motor_stop()
 
 def turnRight(t, stop = True):
 	if not ESTOP and POWER:
-		LF_motor.forward()
-		RB_motor.backward()
-		LB_motor.forward()
-		RF_motor.backward()
+		motor_FL.forward()
+		motor_BR.backward()
+		motor_BL.forward()
+		motor_FR.backward()
 	if stop or ESTOP:
 		sleep(t) # the waiting time need to be tested
 		motor_stop()
 
 def turnleft(t, stop = True):
 	if not ESTOP and POWER:
-		LF_motor.backward()
-		RB_motor.forward()
-		LB_motor.backward()
-		RF_motor.forward()
+		motor_FL.backward()
+		motor_BR.forward()
+		motor_BL.backward()
+		motor_FR.forward()
 	if stop or ESTOP:
 		sleep(t) # the waiting time need to be tested
 		motor_stop()
