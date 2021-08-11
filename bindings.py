@@ -41,7 +41,7 @@ clib.getPath.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int,
 def findPath(start, end):
     global PATH
     print(str(pathlib.Path().absolute() / "examples/maps/basic.txt"))
-    cpath = clib.getPath(round(start[0]), round(start[1]), round(end[0]), round(end[1]), str(pathlib.Path().absolute() / "examples/maps/basic.txt"));
+    cpath = clib.getPath(round(start[0]), round(start[1]), round(end[0]), round(end[1]), STEP, str(pathlib.Path().absolute() / "examples/maps/basic.txt"));
     i = cpath[0:1][0] + 1
     path = cpath[1:i]
     PATH = [(path[i], path[i+1]) for i in range(0, len(path), 2)]
@@ -62,7 +62,7 @@ def hasPosition():
 def fail(direction, distance):
 	print("we should probably log this")
 	
-
+	
 # minor testing
 findPath((0,0), (2,3));
 while hasPosition():

@@ -236,8 +236,9 @@ def estop(sonarDirection, sonar):
 		else:
 			ESTOP = False
 		
-def unestop():
-	ESTOP = False
+def unestop(sonarDirection, sonar):
+	if sonarDirection == DIRECTION and ESTOP == True:
+		ESTOP = False
 
 sonar_right.when_in_range = lambda: estop(RIGHT, sonar_right)
 sonar_right.when_out_of_range = lambda: unestop(RIGHT, sonar_right)
