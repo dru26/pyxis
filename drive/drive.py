@@ -3,8 +3,13 @@ import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from rio.pins import LF_motor, RB_motor, LB_motor, RF_motor, ir_FL, ir_BL, ir_FR, ir_BR
+from rio.pins import power
+from rio.pins import table1 as bforward
+from rio.pins import table2 as bbackward
+from rio.pins import table3 as bleft
+from rio.pins import table4 as bright
 
-from multiprocessing import Thread, Lock
+from multiprocessing import Lock
 ir_mutex = Lock()
 
 # number of white lines on the wheel
@@ -17,12 +22,22 @@ k1 = 1
 k2 = 0.45
 
 ESTOP = False;
+POWER = False;
 MODE = "IR"
 #MODE = "VELOCITY"
 
 SPEED = 0.2
 
 current_position = (0, 0)
+
+def off():
+	POWER = False
+
+def on():
+	POWER = True
+
+power.when_pressed = on
+power.when_released = off
 
 def motor_stop():
 	LF_motor.stop()
@@ -31,7 +46,7 @@ def motor_stop():
 	RF_motor.stop()
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
-	if not ESTOP:
+	if not ESTOP and POWER:
 		LF_motor.forward()
 		RB_motor.forward()
 		LB_motor.forward()
@@ -41,7 +56,7 @@ def forward(t, stop = True): # k is the time the robot will move in seconds
 		motor_stop()
 
 def backward(t, stop = True):
-	if not ESTOP:
+	if not ESTOP and POWER:
 		LF_motor.backward()
 		RB_motor.backward()
 		LB_motor.backward()
@@ -51,7 +66,7 @@ def backward(t, stop = True):
 		motor_stop()
 
 def left(t, stop = True):
-	if not ESTOP:
+	if not ESTOP and POWER:
 	    LF_motor.forward()
 	    RB_motor.forward()
 	    LB_motor.backward()
@@ -61,7 +76,7 @@ def left(t, stop = True):
 		motor_stop()
 
 def right(t, stop = True):
-	if not ESTOP:
+	if not ESTOP and POWER:
 		LF_motor.backward()
 		RB_motor.backward()
 		LB_motor.forward()
@@ -71,7 +86,7 @@ def right(t, stop = True):
 		motor_stop()
 
 def turnRight(t, stop = True):
-	if not ESTOP:
+	if not ESTOP and POWER:
 		LF_motor.forward()
 		RB_motor.backward()
 		LB_motor.forward()
@@ -81,7 +96,7 @@ def turnRight(t, stop = True):
 		motor_stop()
 
 def turnleft(t, stop = True):
-	if not ESTOP:
+	if not ESTOP and POWER:
 		LF_motor.backward()
 		RB_motor.forward()
 		LB_motor.backward()
@@ -94,37 +109,6 @@ def getDistance(k):
 	global pi, r, n, ir_n
 	ir_mutex.aquire();
 	return ((2 * pi * r) / n) * k
-
-ir_FL_old = ir_FL.read()
-ir_FR_old = ir_FR.read()
-ir_BL_old = ir_BL.read()
-ir_BR_old = ir_BR.read()
-ir_n = 0
-def monitorPosition():
-	while True:
-		global ir_FL_old, ir_FR_old, ir_BL_old, ir_BR_old, ir_n
-		ir_mutex.acquire()
-		if (ir_FL.read() < 0.5): # BLACK
-			if (ir_FL_old > 0.5): # WHITE
-				ir_n += 0.25
-				print("FL Moved")
-		if (ir_FR.read() < 0.5): # BLACK
-			if (ir_FR_old > 0.5): # WHITE
-				ir_n += 0.25
-				print("FR Moved")
-		if (ir_BL.read() < 0.5): # BLACK
-			if (ir_BL_old > 0.5): # WHITE
-				ir_n += 0.25
-				print("BL Moved")
-		if (ir_BR.read() < 0.5): # BLACK
-			if (ir_BR_old > 0.5): # WHITE
-				ir_n += 0.25
-				print("BR Moved")
-		ir_mutex.release()
-		ir_FL_old = ir_FL.read()
-		ir_FR_old = ir_FR.read()
-		ir_BL_old = ir_BL.read()
-		ir_BR_old = ir_BR.read()
 
 '''
 check if new_position[0] - current_position[0] + new_position[1] - current_position[1] = 1
@@ -192,5 +176,43 @@ def moveTo(new_position):
 				distance += getDistance(k2)
 			current_position[1] -= distance
 
-p = Process(target = monitorPosition)
-p.start()
+
+# Button control
+bforward.when_pressed = lambda: forward(0, False)
+bbackward.when_pressed = lambda: backward(0, False)
+bleft.when_pressed = lambda: left(0, False)
+bright.when_pressed = lambda: right(0, False)
+bforward.when_released = motor_stop
+bbackward.when_released = motor_stop
+bleft.when_released = motor_stop
+bright.when_released = motor_stop
+
+# Monitors
+def estop():
+	ESTOP = True
+	motor_stop()
+
+def unestop():
+	ESTOP = False
+
+sonar_right.when_in_range = estop()
+sonar_right.when_out_of_range = unestop()
+sonar_back.when_in_range = estop()
+sonar_back.when_out_of_range = unestop()
+sonar_left.when_in_range = estop()
+sonar_left.when_out_of_range = unestop()
+sonar_front.when_in_range = estop()
+sonar_front.when_out_of_range = unestop()
+
+ir_n = 0
+
+def triggerIR():
+	global ir_n
+	ir_mutex.acquire()
+	ir_n += 0.25
+	ir_mutex.release()
+
+ir_FL.when_line = triggerIR
+ir_FR.when_line = triggerIR
+ir_BL.when_line = triggerIR
+ir_BR.when_line = triggerIR

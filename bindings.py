@@ -2,6 +2,9 @@
 import ctypes
 import pathlib
 
+# some global vars for the c functions
+STEP_SIZE = 5
+
 # Load the shared libraries into ctypes
 libname = pathlib.Path().absolute() / "dynamic-map/clib.so"
 clib = ctypes.CDLL(libname)

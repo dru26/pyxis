@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from rio.pins import sonar_right, sonar_back, sonar_left, sonar_front, motor_FL
 from rio.pins import motor_BR, motor_BL, motor_FR, ir_FL, ir_BL, ir_FR, ir_BR
 from rio.pins import power, table1, table2, table3, table4, table5, table6
-from multiprocessing import Process
+import asyncio
 
 sg.theme('dark grey 9')
 
@@ -85,49 +85,40 @@ layout = [
 
 ]
 
-front_d = 0
-back_d = 0
-left_d = 0
-right_d = 0
-def left():
-	global sonar_left, left_d
-	while True:
-		print("left queue:")
-		print(sonar_left._queue)
-		if sonar_left._queue != None:
-			left_d = str(sonar_left.value) + "m"
-def right():
-	global sonar_right, right_d
-	while True:
-		right_d = str(sonar_right.value) + "m"
-def front():
-	global sonar_front, front_d
-	while True:
-		front_d = str(sonar_front.value) + "m"
-def back():
-	global sonar_back, back_d
-	while True:
-		back_d = str(sonar_front.value) + "m"
-
-
 if __name__ == "__main__":
-	p1 = Process(target = left)
-	p1.start()
-	p2 = Process(target = right)
-	p2.start()
-	p3 = Process(target = front)
-	p3.start()
-	p4 = Process(target = back)
-	p4.start()
-
-	#while True:
-	#	pass
 	# Create the window
 	window = sg.Window("Python ", layout)
 
 	# Create an event loop
 	while True:
-	    event, values = window.read(1000)
+        # Update the Button values
+	    window["-B0-"].update(str(power.is_pressed))
+	    window["-B1-"].update(str(table1.is_pressed))
+	    window["-B2-"].update(str(table2.is_pressed))
+	    window["-B3-"].update(str(table3.is_pressed))
+	    window["-B4-"].update(str(table4.is_pressed))
+	    window["-B5-"].update(str(table5.is_pressed))
+	    window["-B6-"].update(str(table6.is_pressed))
+
+	    # Update the IR sensor values
+	    window["-I1-"].update(str(ir_FL.value))
+	    window["-I2-"].update(str(ir_FR.value))
+	    window["-I3-"].update(str(ir_BL.value))
+	    window["-I4-"].update(str(ir_BR.value))
+
+	    # Update the Motor values
+	    window["-M1-"].update(str(motor_FL.value))
+	    window["-M2-"].update(str(motor_FR.value))
+	    window["-M3-"].update(str(motor_BL.value))
+	    window["-M4-"].update(str(motor_BR.value))
+
+	    # Update the Sonar values
+	    window["-S1-"].update(sonar_front.value)
+	    window["-S2-"].update(sonar_back.value)
+	    window["-S3-"].update(sonar_left.value)
+	    window["-S4-"].update(sonar_right.value)
+
+	    event, values = window.read(100)
 	    # Read Motor button presses
 	    if event == "BL Motor Power (Forward)":
 	        motor_BL.forward()
@@ -160,32 +151,5 @@ if __name__ == "__main__":
 	    # End program if user closes window
 	    if event == sg.WIN_CLOSED:
 	        break
-
-	    # Update the Button values
-	    window["-B0-"].update(str(power.is_pressed))
-	    window["-B1-"].update(str(table1.is_pressed))
-	    window["-B2-"].update(str(table2.is_pressed))
-	    window["-B3-"].update(str(table3.is_pressed))
-	    window["-B4-"].update(str(table4.is_pressed))
-	    window["-B5-"].update(str(table5.is_pressed))
-	    window["-B6-"].update(str(table6.is_pressed))
-
-	    # Update the IR sensor values
-	    window["-I1-"].update(str(ir_FL.value))
-	    window["-I2-"].update(str(ir_FR.value))
-	    window["-I3-"].update(str(ir_BL.value))
-	    window["-I4-"].update(str(ir_BR.value))
-
-	    # Update the Motor values
-	    window["-M1-"].update(str(motor_FL.value))
-	    window["-M2-"].update(str(motor_FR.value))
-	    window["-M3-"].update(str(motor_BL.value))
-	    window["-M4-"].update(str(motor_BR.value))
-
-	    # Update the Sonar values
-	    window["-S1-"].update(front_d)
-	    window["-S2-"].update(back_d)
-	    window["-S3-"].update(left_d)
-	    window["-S4-"].update(right_d)
 
 	window.close()

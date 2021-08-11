@@ -1,3 +1,4 @@
 # pip
 sudo pip install gpiozero
 sudo pip install PySimpleGUI
+pip install rpi.gpio
