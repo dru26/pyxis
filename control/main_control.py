@@ -1,5 +1,6 @@
 import drive
 import sonar
+import bindings
 from drive import ESTOP
 from time import sleep
 from rio import power as power_b
@@ -12,71 +13,63 @@ from rio import table6 as table_b
 
 
 
-Position table_position
 flag = False
-state = 0
-While True:
+state = 4
+retry = 0
+while True:
 
-	if state == 0: #waiting state
+	if state == 0: #wait to go to table
 		table_b.wait_for_press()
-		findPath(drive.CURRENT_POSITION, table_position)
+		destination = table_position
+		bindings.findPath(drive.CURRENT_POSITION, destination)
 		state = 1
+
 	if state == 1: #move towards destination
-		while hasPosition():
-			if ESTOP:
-				sleep(1)
-				if ESTOP:
-					sleep(1)
+		while bindings.hasPosition():
+			if state != 1:
+				break
+			if not retry:
+				next_position = nextPosition()
+			retry = 0
+			moveStatus = drive.moveto(next_position)
+			if not moveStatus:
+				if FAILED:
+					if bindings.hasPosition():
+						bindings.findPath(drive.CURRENT_POSITION, destination)
+					else: #close enough to destination
+						break
 				else:
-					
+					retry = 1
 
-			next_position = nextPosition()
+		if destination == (0,0): #destination was home
+			state = 3
+		else:
+			state = 0
 
-			drive.moveto(next_position)
-		state = 0
+	if state == 3: #wait for return to home
+		table_b.wait_for_press()
+		destination = (0,0)
+		bindings.findPath(drive.CURRENT_POSITION, destination)
+		state = 1
+
+	if state == 4: #setup routine
+		if forward_b.is_pressed():
+			sleep(1)
+			drive.motor_forward(1)
+		if backward_b.is_pressed():
+			sleep(1)
+			drive.motor_backward(1)
+		if left_b.is_pressed():
+			sleep(1)
+			drive.motor_left(1)
+		if right_b.is_pressed():
+			sleep(1)
+			drive.motor_right(1)
+		if table_b.is_pressed():
+			sleep(1)
+			table_position = drive.CURRENT_POSITION
+			state = 3
 
 
 
 
-
-
-
-	##############
-	#Manual movement/set table location code
-	position temp = current_position
-	while forward_b.is_pressed():
-		flag = True
-		motor_forward1()
-	if flag:
-		motor_stop()
-		flag = False
-		current_position.y+=updateposition(?,?,?)/0.02   #update the current location by distance
-	while backward_b.is_pressed():
-		flag = True
-		motor_backward1()
-	if flag:
-		motor_stop()
-		flag = False
-		current_position.y-=updateposition(?,?,?)/0.02
-	while left_b.is_pressed():
-		flag = True
-		motor_left1()
-	if flag:
-		motor_stop()
-		flag = False
-		current_position.x-=updateposition(?,?,?)/0.02
-	while right_b.is_pressed():
-		flag = True
-		motor_right1()
-	if flag:
-		motor_stop()
-		flag = false
-		current_position.x+=updateposition(?,?,?)/0.02
-
-	if table_b.is_pressed():
-		table_position = current_position
-		exit()
-
-Findpath(table_position,(0,0))
-while hasPosition():
-    moveto(nextPosition())
