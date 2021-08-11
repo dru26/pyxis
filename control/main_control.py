@@ -37,6 +37,7 @@ while True:
 					if bindings.hasPosition():
 						bindings.findPath(drive.CURRENT_POSITION, destination)
 					else: #close enough to destination
+						retry = 0
 						break
 				else:
 					retry = 1
