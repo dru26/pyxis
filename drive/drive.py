@@ -1,4 +1,4 @@
-from time import sleep
+motor_FRfrom time import sleep
 import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -8,7 +8,7 @@ from rio.pins import table1 as bforward
 from rio.pins import table2 as bbackward
 from rio.pins import table3 as bleft
 from rio.pins import table4 as bright
-from bindings import hasPosition, fail
+import bindings
 
 from multiprocessing import Lock
 ir_mutex = Lock()
@@ -230,8 +230,8 @@ def estop(sonarDirection, sonar):
 		ESTOP = True
 		sleep(3)
 		if sonar.distance < sonar.threshold_distance:
-			if hasPosition():
-				fail(DIRECTION, sonar.distance)
+			if bindings.hasPosition():
+				bindings.fail(DIRECTION, sonar.distance)
 			motor_stop()
 		else:
 			ESTOP = False
