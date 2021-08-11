@@ -57,7 +57,7 @@ power.when_pressed = on
 power.when_released = off
 
 def motor_stop():
-	motor_LF.stop()
+	motor_FL.stop()
 	motor_BR.stop()
 	motor_BL.stop()
 	motor_FR.stop()
