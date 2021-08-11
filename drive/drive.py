@@ -48,15 +48,20 @@ DELTA = (1/SPEED) * STEP
 CURRENT_POSITION = (0, 0)
 
 def off():
+	global POWER
+	print("Power OFF")
 	POWER = False
 
 def on():
+	global POWER
+	print("Power ON")
 	POWER = True
 
 power.when_pressed = on
 power.when_released = off
 
 def motor_stop():
+	print("Motor stop!")
 	motor_FL.stop()
 	motor_BR.stop()
 	motor_BL.stop()
@@ -65,6 +70,7 @@ def motor_stop():
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
 	DIRECTION = FORWARD
+	print("Motor forward!")
 	if not ESTOP and POWER:
 		motor_FL.forward()
 		motor_BR.forward()
@@ -75,6 +81,7 @@ def forward(t, stop = True): # k is the time the robot will move in seconds
 		motor_stop()
 
 def backward(t, stop = True):
+	print("Motor backward!")
 	DIRECTION = BACKWARD
 	if not ESTOP and POWER:
 		motor_FL.backward()
@@ -86,6 +93,7 @@ def backward(t, stop = True):
 		motor_stop()
 
 def left(t, stop = True):
+	print("Motor left!")
 	DIRECTION = LEFT
 	if not ESTOP and POWER:
 	    motor_FL.forward()
@@ -97,6 +105,7 @@ def left(t, stop = True):
 		motor_stop()
 
 def right(t, stop = True):
+	print("Motor right!")
 	DIRECTION = RIGHT
 	if not ESTOP and POWER:
 		motor_FL.backward()
@@ -163,6 +172,7 @@ check if new_position[0] - CURRENT_POSITION[0] + new_position[1] - CURRENT_POSIT
 '''
 def moveTo(new_position):
 	global CURRENT_POSITION
+	print("Moving to ", new_position)
 	'''
 	if the speed of the motor is 0.2cm/s, we can just let motor move 5 seconds to reach the destination
 	(since we can assume that each position is 1cm apart in a cardinal direction)
@@ -229,6 +239,7 @@ def estop(sonarDirection, sonar):
 	global ESTOP
 	if sonarDirection == DIRECTION:
 		ESTOP = True
+		print("ESTOPed!!")
 		sleep(3)
 		if sonar.distance < sonar.threshold_distance:
 			if bindings.hasPosition():
@@ -236,10 +247,12 @@ def estop(sonarDirection, sonar):
 			motor_stop()
 		else:
 			ESTOP = False
+			
 		
 def unestop(sonarDirection, sonar):
 	if sonarDirection == DIRECTION and ESTOP == True:
 		ESTOP = False
+		print("UNESTOP!")
 
 sonar_right.when_in_range = lambda: estop(RIGHT, sonar_right)
 sonar_right.when_out_of_range = lambda: unestop(RIGHT, sonar_right)
@@ -251,6 +264,7 @@ sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
 sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
 def triggerIR():
+	print("IR Line detected")
 	global ir_n
 	ir_mutex.acquire()
 	ir_n += 0.25
