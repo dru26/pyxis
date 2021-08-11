@@ -11,6 +11,9 @@ from rio import table5 as path_b
 from rio import table6 as table_b
 
 
+
+
+
 Position table_position
 flag = False
 state = 0;
@@ -22,9 +25,13 @@ While True:
 		state = 1
 	if state == 1: #move towards destination
 		while hasPosition():
-			while !(power_b.is_pressed()):
-				sleep(1)
-			drive.moveto(nextPosition())
+			if !(power_b.is_pressed()):
+				ESTOP = True
+			else:
+				ESTOP = False
+			next_position = nextPosition()
+
+			drive.moveto(next_position)
 		state = 0
 
 
