@@ -9,6 +9,7 @@ from rio.pins import table1 as bforward
 from rio.pins import table2 as bbackward
 from rio.pins import table3 as bleft
 from rio.pins import table4 as bright
+from rio.pins import table5 as bpath
 import bindings
 
 from multiprocessing import Lock
@@ -31,7 +32,7 @@ r = 4.8
 k1 = 1
 # k value of going side to side
 k2 = 0.45
-	
+
 LEFT = 0
 RIGHT = 1
 FORWARD = 2
@@ -201,7 +202,7 @@ def moveTo(new_position):
 		start_y = CURRENT_POSITION[1]
 		if checkDirection(new_position) == FORWARD:
 			forward(0, False)
-			while abs(start_x - CURRENT_POSITION[0]) < STEP: 
+			while abs(start_x - CURRENT_POSITION[0]) < STEP:
 				if ESTOP or POWER:
 					return False
 			motor_stop()
@@ -239,6 +240,19 @@ bbackward.when_released = motor_stop
 bleft.when_released = motor_stop
 bright.when_released = motor_stop
 
+# Preset path
+def presetPath():
+	sleep(2)
+	moveTo((0, 100))
+	sleep(2)
+	moveTo((100, 100))
+	sleep(2)
+	moveTo((0, 100))
+	sleep(2)
+	moveTo((0, 0))
+
+bpath.when_pressed = lambda: presetPath
+
 # Monitors
 def estop(sonarDirection, sonar):
 	global ESTOP
@@ -252,8 +266,8 @@ def estop(sonarDirection, sonar):
 			motor_stop()
 		else:
 			ESTOP = False
-			
-		
+
+
 def unestop(sonarDirection, sonar):
 	if sonarDirection == DIRECTION and ESTOP == True:
 		ESTOP = False
