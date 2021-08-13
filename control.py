@@ -59,7 +59,6 @@ while True:
 		state = 1
 
 	if state == 4: #setup routine
-		print("STATE 4")
 		if forward_b.is_pressed:
 			drive.forward(0, False)
 			while forward_b.is_pressed:

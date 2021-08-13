@@ -72,7 +72,7 @@ def motor_stop():
 	motor_BR.stop()
 	motor_BL.stop()
 	motor_FR.stop()
-	DIRECTION = None
+	#DIRECTION = None
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
 	global DIRECTION
