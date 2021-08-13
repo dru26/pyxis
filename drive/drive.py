@@ -175,13 +175,13 @@ def flushIR():
 	global ir_mutex, ir_n, CURRENT_POSITION, TARGET_X, TARGET_Y
 	ir_mutex.acquire()
 	if DIRECTION == FRONT:
-		CURRENT_POSITION[0] += ir_n * getDistance(k1)
+		CURRENT_POSITION = (CURRENT_POSITION[0] + (ir_n * getDistance(k1)), CURRENT_POSITION[1])
 	elif DIRECTION == BACK:
-		CURRENT_POSITION[0] -= ir_n * getDistance(k1)
+		CURRENT_POSITION = (CURRENT_POSITION[0] - (ir_n * getDistance(k1)), CURRENT_POSITION[1])
 	elif DIRECTION == RIGHT:
-		CURRENT_POSITION[1] += ir_n * getDistance(k2)
+		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] + (ir_n * getDistance(k2)))
 	elif DIRECTION == LEFT:
-		CURRENT_POSITION[1] -= ir_n * getDistance(k2)
+		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] - (ir_n * getDistance(k2)))
 	else:
 		print("Something went terribly, terribly wrong here :(")
 	ir_n = 0
