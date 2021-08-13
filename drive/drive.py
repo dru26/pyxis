@@ -3,7 +3,7 @@ import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from rio.pins import motor_FL, motor_FR, motor_BL, motor_BR, ir_FL, ir_BL, ir_FR, ir_BR
-from rio.pins import pwn_FL, pwm_FR, pwm_BL, pwm_BR
+from rio.pins import pwm_FL, pwm_FR, pwm_BL, pwm_BR
 from rio.pins import sonar_left, sonar_right
 from rio.pins import sonar_left, sonar_right
 from rio.pins import power
@@ -40,21 +40,13 @@ CURRENT_POSITION = (0, 0)
 
 def updateESTOP():
 	global ESTOP
-	if DISTANCE == None:
+	if DIRECTION == None:
 		ESTOP = False
-	if DISTANCE == RIGHT and sonar_right.distance < sonar_right.threshold_distance:
+	if DIRECTION == FRONT and sonar_right.distance < sonar_right.threshold_distance:
 		ESTOP = True
 	else:
 		ESTOP = False
-	if DISTANCE == LEFT and sonar_left.distance < sonar_left.threshold_distance:
-		ESTOP = True
-	else:
-		ESTOP = False
-	if DISTANCE == FRONT and sonar_front.distance < sonar_front.threshold_distance:
-		ESTOP = True
-	else:
-		ESTOP = False
-	if DISTANCE == BACK and sonar_back.distance < sonar_back.threshold_distance:
+	if DIRECTION == FRONT and sonar_left.distance < sonar_left.threshold_distance:
 		ESTOP = True
 	else:
 		ESTOP = False
