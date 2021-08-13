@@ -229,17 +229,17 @@ def moveTo(new_position):
 		if checkDirection(new_position) == FRONT:
 			forward(0, False)
 			while abs(start_x - CURRENT_POSITION[0]) < STEP:
-				print(abs(start_x - CURRENT_POSITION[0]))
 				if ESTOP or POWER:
 					return False
+				sleep(0.1)
 			motor_stop()
 			distance += getDistance(k1)
 		elif checkDirection(new_position) == BACK:
 			backward(0, False)
 			while abs(start_x - CURRENT_POSITION[0]) < STEP:
-				print(abs(start_x - CURRENT_POSITION[0]))
 				if ESTOP or POWER:
 					return False
+				sleep(0.1)
 			motor_stop()
 			distance += getDistance(k1)
 		elif checkDirection(new_position) == RIGHT:
@@ -247,6 +247,7 @@ def moveTo(new_position):
 			while abs(start_y - CURRENT_POSITION[1]) < STEP:
 				if ESTOP or POWER:
 					return False
+				sleep(0.1)
 			motor_stop()
 			distance += getDistance(k2)
 		elif checkDirection(new_position) == LEFT:
@@ -254,6 +255,7 @@ def moveTo(new_position):
 			while abs(start_y - CURRENT_POSITION[1]) < STEP:
 				if ESTOP or POWER:
 					return False
+				sleep(0.1)
 			motor_stop()
 			distance += getDistance(k2)
 	return True
