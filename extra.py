@@ -4,8 +4,8 @@ import pathlib
 WIDTH = 30
 LEFT = 0
 RIGHT = 1
-FORWARD = 2
-BACKWARD = 3
+FORWARD = FRONT = 2
+BACKWARD = BACK = 3
 STEP = 5
 
 FILE = str(pathlib.Path().absolute() / "examples/basic.txt")
