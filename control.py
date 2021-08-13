@@ -18,12 +18,14 @@ retry = 0
 while True:
 
 	if state == 0: #wait to go to table
+		print("STATE 0")
 		table_b.wait_for_press()
 		destination = table_position
 		bindings.findPath(drive.CURRENT_POSITION, destination)
 		state = 1
 
 	if state == 1: #move towards destination
+		print("STATE 1")
 		while bindings.hasPosition():
 			if state != 1:
 				break
@@ -50,12 +52,14 @@ while True:
 			state = 0
 
 	if state == 3: #wait for return to home
+		print("STATE 3")
 		table_b.wait_for_press()
 		destination = (0,0)
 		bindings.findPath(drive.CURRENT_POSITION, destination)
 		state = 1
 
 	if state == 4: #setup routine
+		print("STATE 4")
 		if forward_b.is_pressed:
 			drive.forward(0, False)
 			while forward_b.is_pressed:

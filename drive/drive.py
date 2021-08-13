@@ -29,7 +29,7 @@ k1 = 1
 k2 = 0.45
 
 ESTOP = False
-POWER = False
+POWER = power.is_pressed
 MODE = "IR"
 #MODE = "VELOCITY"
 
