@@ -271,7 +271,6 @@ def moveTo(new_position):
 					return False
 				sleep(0.1)
 			motor_stop()
-			distance += getDistance(k2)
 		elif checkDirection(new_position) == LEFT:
 			left(0, False)
 			while abs(abs(start_y) - abs(CURRENT_POSITION[1])) < STEP:

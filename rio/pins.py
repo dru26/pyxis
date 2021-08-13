@@ -5,13 +5,13 @@ from gpiozero.pins.native import NativeFactory
 factory = NativeFactory()
 
 # Buttons #
-power = Button(24, pull_up = None, active_state = True, bounce_time = .005)
-table1 = Button(0, pull_up = None, active_state = True, bounce_time = .005)
-table2 = Button(5, pull_up = None, active_state = True, bounce_time = .005)
-table3 = Button(6, pull_up = None, active_state = True, bounce_time = .005)
-table4 = Button(13, pull_up = None, active_state = True, bounce_time = .005)
-table5 = Button(19, pull_up = None, active_state = True, bounce_time = .005)
-table6 = Button(26, pull_up = None, active_state = True, bounce_time = .005)
+power = Button(24, pull_up = None, active_state = True)
+table1 = Button(0, pull_up = None, active_state = True)
+table2 = Button(5, pull_up = None, active_state = True)
+table3 = Button(6, pull_up = None, active_state = True)
+table4 = Button(13, pull_up = None, active_state = True)
+table5 = Button(19, pull_up = None, active_state = True)
+table6 = Button(26, pull_up = None, active_state = True)
 
 # IR Sensors #
 ir_FL = LineSensor(12, sample_rate = 150, queue_len = 9)
