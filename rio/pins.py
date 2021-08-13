@@ -14,10 +14,10 @@ table5 = Button(19, pull_up = None, active_state = True, bounce_time = .005)
 table6 = Button(26, pull_up = None, active_state = True, bounce_time = .005)
 
 # IR Sensors #
-ir_FL = LineSensor(12, sample_rate = 200, partial = True)
-ir_FR = LineSensor(16, sample_rate = 200, partial = True)
-ir_BL = LineSensor(20, sample_rate = 200, partial = True)
-ir_BR = LineSensor(21, sample_rate = 200, partial = True)
+ir_FL = LineSensor(12, sample_rate = 150, queue_len = 9)
+ir_FR = LineSensor(16, sample_rate = 150, queue_len = 9)
+ir_BL = LineSensor(20, sample_rate = 150, queue_len = 9)
+ir_BR = LineSensor(21, sample_rate = 150, queue_len = 9)
 
 # Ultrasonic Rangers #
 sonar_left = DistanceSensor(echo = 25, trigger = 7, max_distance = 1, threshold_distance = 0.25, partial = True)
