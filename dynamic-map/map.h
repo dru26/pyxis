@@ -217,9 +217,7 @@ inline void ProbabilityMap::expand(const Position& p) {
         for (itr = this->_layout.begin(); itr != this->_layout.end(); ++itr) {
             itr->push_front(this->_default_grid);
         }
-
         --this->_ymin;
-
     }
     // Expand in the x max direction
     while (x(p) >= _xmax) {

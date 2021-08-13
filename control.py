@@ -1,16 +1,16 @@
 import drive
 import sonar
 import bindings
-from drive import ESTOP
+import extra
+from drive.drive import ESTOP
 from time import sleep
-from rio import power as power_b
-from rio import table1 as forward_b
-from rio import table2 as backward_b
-from rio import table3 as left_b
-from rio import table4 as right_b
-from rio import table5 as path_b
-from rio import table6 as table_b
-
+from rio.pins import power as power_b
+from rio.pins import table1 as forward_b
+from rio.pins import table2 as backward_b
+from rio.pins import table3 as left_b
+from rio.pins import table4 as right_b
+from rio.pins import table5 as path_b
+from rio.pins import table6 as table_b
 
 
 flag = False
@@ -36,6 +36,9 @@ while True:
 				if FAILED:
 					if bindings.hasPosition():
 						bindings.findPath(drive.CURRENT_POSITION, destination)
+						if not bindings.hasPosition:
+							extra.clearFails()
+							bindings.findPath(drive.CURRENT_POSITION, destination)
 					else: #close enough to destination
 						retry = 0
 						break
@@ -70,7 +73,3 @@ while True:
 			sleep(1)
 			table_position = drive.CURRENT_POSITION
 			state = 3
-
-
-
-

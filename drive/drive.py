@@ -11,19 +11,12 @@ from rio.pins import table3 as bleft
 from rio.pins import table4 as bright
 from rio.pins import table5 as bpath
 import bindings
+from extra import FORWARD, BACKWARD, STEP, LEFT, RIGHT
 
 from multiprocessing import Lock
 ir_mutex = Lock()
 
 DIRECTION = None
-
-LEFT = 0
-RIGHT = 1
-FORWARD = 2
-BACKWARD = 3
-
-STEP = 5
-
 # number of white lines on the wheel
 n = 5
 # radius of the wheels in cm
@@ -32,11 +25,6 @@ r = 4.8
 k1 = 1
 # k value of going side to side
 k2 = 0.45
-
-LEFT = 0
-RIGHT = 1
-FORWARD = 2
-BACKWARD = 3
 
 ESTOP = False
 POWER = False
@@ -48,6 +36,27 @@ DELTA = (1/SPEED) * STEP
 
 CURRENT_POSITION = (0, 0)
 
+def updateESTOP():
+	global ESTOP
+	if DISTANCE == None:
+		ESTOP = False
+	if DISTANCE == RIGHT and sonar_right.distance < sonar_right.threshold_distance:
+		ESTOP = True
+	else:
+		ESTOP = False
+	if DISTANCE == LEFT and sonar_left.distance < sonar_left.threshold_distance:
+		ESTOP = True
+	else:
+		ESTOP = False
+	if DISTANCE == FRONT and sonar_front.distance < sonar_front.threshold_distance:
+		ESTOP = True
+	else:
+		ESTOP = False
+	if DISTANCE == BACK and sonar_back.distance < sonar_back.threshold_distance:
+		ESTOP = True
+	else:
+		ESTOP = False
+
 def off():
 	global POWER
 	print("Power OFF")
@@ -57,6 +66,7 @@ def on():
 	global POWER
 	print("Power ON")
 	POWER = True
+	updateESTOP()
 
 power.when_pressed = on
 power.when_released = off
@@ -73,6 +83,7 @@ def motor_stop():
 def forward(t, stop = True): # k is the time the robot will move in seconds
 	global DIRECTION
 	DIRECTION = FORWARD
+	updateESTOP()
 	print("Motor forward!")
 	if not ESTOP and POWER:
 		motor_FL.forward()
@@ -87,6 +98,7 @@ def backward(t, stop = True):
 	global DIRECTION
 	print("Motor backward!")
 	DIRECTION = BACKWARD
+	updateESTOP()
 	if not ESTOP and POWER:
 		motor_FL.backward()
 		motor_BR.backward()
@@ -100,6 +112,7 @@ def left(t, stop = True):
 	global DIRECTION
 	print("Motor left!")
 	DIRECTION = LEFT
+	updateESTOP()
 	if not ESTOP and POWER:
 	    motor_FL.forward()
 	    motor_BR.forward()
@@ -113,6 +126,7 @@ def right(t, stop = True):
 	global DIRECTION
 	print("Motor right!")
 	DIRECTION = RIGHT
+	updateESTOP()
 	if not ESTOP and POWER:
 		motor_FL.backward()
 		motor_BR.backward()
@@ -231,6 +245,7 @@ def moveTo(new_position):
 	return True
 
 # Button control
+'''
 bforward.when_pressed = lambda: forward(1)
 bbackward.when_pressed = lambda: backward(1)
 bleft.when_pressed = lambda: left(1)
@@ -239,6 +254,7 @@ bforward.when_released = motor_stop
 bbackward.when_released = motor_stop
 bleft.when_released = motor_stop
 bright.when_released = motor_stop
+'''
 
 # Preset path
 def presetPath():
@@ -262,11 +278,10 @@ def estop(sonarDirection, sonar):
 		sleep(3)
 		if sonar.distance < sonar.threshold_distance:
 			if bindings.hasPosition():
-				bindings.fail(DIRECTION, sonar.distance)
+				extra.fail(CURRENT_POSITION, DIRECTION, sonar.distance)
 			motor_stop()
 		else:
 			ESTOP = False
-
 
 def unestop(sonarDirection, sonar):
 	if sonarDirection == DIRECTION and ESTOP == True:

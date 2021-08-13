@@ -91,6 +91,7 @@ if __name__ == "__main__":
 
 	# Create an event loop
 	while True:
+        event, values = window.read(100)
         # Update the Button values
 	    window["-B0-"].update(str(power.is_pressed))
 	    window["-B1-"].update(str(table1.is_pressed))
@@ -118,7 +119,6 @@ if __name__ == "__main__":
 	    window["-S3-"].update(sonar_left.value)
 	    window["-S4-"].update(sonar_right.value)
 
-	    event, values = window.read(100)
 	    # Read Motor button presses
 	    if event == "BL Motor Power (Forward)":
 	        motor_BL.forward()

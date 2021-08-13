@@ -24,11 +24,9 @@ g++ -shared -o clib.so clib.o
   pos[1] = y(current.back());
   current.pop_back();
 }
+*/
 
-extern "C" bool hasPath(int* pos) {
-  if (current.size() == 0) { return false; }
-  return true;
-}*/
+const int WIDTH = 30;
 
 void loadTestMap(ProbabilityMap& p_map, std::string path) {
   std::ifstream file(path);
@@ -59,7 +57,7 @@ extern "C" void destructor(int* path) {
 
 // implimentation of Dijkstra's algorithm
 extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, int step, const char* path) {
-    ProbabilityMap p_map(15);
+    ProbabilityMap p_map(WIDTH / 2);
 
 		// Transform the dest coords to a multiple of step from start
 		dest_x = start_x + (round((dest_x - start_x) / step) * step);
