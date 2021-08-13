@@ -286,13 +286,13 @@ bleft.when_released = motor_stop
 bright.when_released = motor_stop
 '''
 
+'''
 # Preset path
 def presetPath():
 	sleep(5)
 	moveTo((100, 0))
 	sleep(5)
 	moveTo((0, 100))
-	'''
 	sleep(2)
 	moveTo((0, 100))
 	sleep(2)
@@ -301,10 +301,9 @@ def presetPath():
 	moveTo((0, 100))
 	sleep(2)
 	moveTo((0, 0))
-	'''
 
 bpath.when_pressed = presetPath
-
+'''
 # Monitors
 def estop(sonarDirection, sonar):
 	global ESTOP

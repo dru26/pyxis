@@ -63,18 +63,26 @@ while True:
 			drive.forward(0, False)
 			forward_b.wait_for_release()
 			drive.motor_stop()
-		if backward_b.is_pressed:
+		elif backward_b.is_pressed:
 			drive.backward(0, False)
 			backward_b.wait_for_release()
 			drive.motor_stop()
-		if left_b.is_pressed:
+		elif left_b.is_pressed:
 			drive.left(0, False)
 			left_b.wait_for_release()
 			drive.motor_stop()
-		if right_b.is_pressed:
+		elif right_b.is_pressed:
 			drive.right(0, False)
 			right_b.wait_for_release()
 			drive.motor_stop()
-		while table_b.is_pressed:
+		elif path_b.is_pressed:
+
+			bpath.wait_for_release()
+			print("start")
+			moveTo((100, 0))
+
+			moveTo((0, 100))
+			print("end")
+		if table_b.is_pressed:
 			table_position = drive.CURRENT_POSITION
 			state = 3
