@@ -79,7 +79,7 @@ layout = [
 
 if __name__ == "__main__":
 	# Create the window
-    window = sg.Window("Python ", layout, resize = True)
+    window = sg.Window("Python ", layout, resizable = True)
 
 	# Create an event loop
     while True:
