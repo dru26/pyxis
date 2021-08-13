@@ -38,6 +38,23 @@ DELTA = (1/SPEED) * STEP
 
 CURRENT_POSITION = (0, 0)
 
+ir_n = 0
+def flushIR():
+	global ir_mutex, ir_n, CURRENT_POSITION, TARGET_X, TARGET_Y
+	ir_mutex.acquire()
+	if DIRECTION == FRONT:
+		CURRENT_POSITION = (CURRENT_POSITION[0] + (ir_n * getDistance(k1)), CURRENT_POSITION[1])
+	elif DIRECTION == BACK:
+		CURRENT_POSITION = (CURRENT_POSITION[0] - (ir_n * getDistance(k1)), CURRENT_POSITION[1])
+	elif DIRECTION == RIGHT:
+		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] + (ir_n * getDistance(k2)))
+	elif DIRECTION == LEFT:
+		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] - (ir_n * getDistance(k2)))
+	else:
+		print("Something went terribly, terribly wrong here :(")
+	ir_n = 0
+	ir_mutex.release()
+
 def updateESTOP():
 	global ESTOP
 	if DIRECTION == None:
@@ -56,12 +73,14 @@ def updateESTOP():
 def off():
 	global POWER
 	print("Power OFF")
+	flushIR()
 	POWER = False
 
 def on():
 	global POWER
 	print("Power ON")
 	POWER = True
+	flushIR()
 	updateESTOP()
 
 power.when_pressed = on
@@ -78,7 +97,9 @@ def motor_stop():
 
 def forward(t, stop = True): # k is the time the robot will move in seconds
 	global DIRECTION
-	DIRECTION = FRONT
+	if not DIRECTION == FRONT:
+		flushIR()
+		DIRECTION = FRONT
 	pwm_FL.value = 0.8
 	pwm_FR.value = 0.8
 	pwm_BL.value = 0.8
@@ -97,7 +118,9 @@ def forward(t, stop = True): # k is the time the robot will move in seconds
 def backward(t, stop = True):
 	global DIRECTION
 	print("Motor backward!")
-	DIRECTION = BACK
+	if not DIRECTION == BACK:
+		flushIR()
+		DIRECTION = BACK
 	pwm_FL.value = 0.8
 	pwm_FR.value = 0.8
 	pwm_BL.value = 0.8
@@ -115,7 +138,9 @@ def backward(t, stop = True):
 def left(t, stop = True):
 	global DIRECTION
 	print("Motor left!")
-	DIRECTION = LEFT
+	if not DIRECTION == LEFT:
+		flushIR()
+		DIRECTION = LEFT
 	pwm_FL.value = 1
 	pwm_FR.value = 1
 	pwm_BL.value = 1
@@ -133,7 +158,9 @@ def left(t, stop = True):
 def right(t, stop = True):
 	global DIRECTION
 	print("Motor right!")
-	DIRECTION = RIGHT
+	if not DIRECTION == RIGHT:
+		flushIR()
+		DIRECTION = RIGHT
 	pwm_FL.value = 1
 	pwm_FR.value = 1
 	pwm_BL.value = 1
@@ -172,22 +199,7 @@ def getDistance(k):
 	global pi, r, n
 	return ((2 * pi * r) / n) * k
 
-ir_n = 0
-def flushIR():
-	global ir_mutex, ir_n, CURRENT_POSITION, TARGET_X, TARGET_Y
-	ir_mutex.acquire()
-	if DIRECTION == FRONT:
-		CURRENT_POSITION = (CURRENT_POSITION[0] + (ir_n * getDistance(k1)), CURRENT_POSITION[1])
-	elif DIRECTION == BACK:
-		CURRENT_POSITION = (CURRENT_POSITION[0] - (ir_n * getDistance(k1)), CURRENT_POSITION[1])
-	elif DIRECTION == RIGHT:
-		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] + (ir_n * getDistance(k2)))
-	elif DIRECTION == LEFT:
-		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] - (ir_n * getDistance(k2)))
-	else:
-		print("Something went terribly, terribly wrong here :(")
-	ir_n = 0
-	ir_mutex.release()
+
 
 def checkDirection(pos):
 	if pos[0] - round(CURRENT_POSITION[0]) > 0:
