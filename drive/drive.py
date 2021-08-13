@@ -24,13 +24,13 @@ n = 5
 # radius of the wheels in cm
 r = 4.8
 # k value of going forward
-k1 = 1
+k1 = 1.5
 # k value of going side to side
-k2 = 0.45
+k2 = 1
 
 ESTOP = False
 POWER = power.is_pressed
-MODE = "VELOCITY"
+MODE = "IR"
 #MODE = "VELOCITY"
 
 SPEED = 0.2
