@@ -320,8 +320,8 @@ sonar_left.when_out_of_range = lambda: unestop(FRONT, sonar_left)
 #sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
 #sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
-def triggerIR(ir):
-	print("IR", ir.value);
+def triggerIR(ir, v):
+	print("IR", ir.value, v);
 	global ir_n
 	ir_mutex.acquire()
 	ir_n += 0.25
@@ -331,7 +331,7 @@ def triggerIR(ir):
 		flushIR()
 		print("    Now at ", CURRENT_POSITION)
 
-ir_FL.when_no_line = lambda: triggerIR(ir_FL)
-ir_FR.when_no_line = lambda: triggerIR(ir_FR)
-ir_BL.when_no_line = lambda: triggerIR(ir_BL)
-ir_BR.when_no_line = lambda: triggerIR(ir_BR)
+ir_FL.when_line = lambda: triggerIR(ir_FL, "FL")
+ir_FR.when_line = lambda: triggerIR(ir_FR, "FR")
+ir_BL.when_line = lambda: triggerIR(ir_BL, "BL")
+ir_BR.when_line = lambda: triggerIR(ir_BR, "BR")
