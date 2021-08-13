@@ -3,6 +3,7 @@ import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from rio.pins import motor_FL, motor_FR, motor_BL, motor_BR, ir_FL, ir_BL, ir_FR, ir_BR
+from rio.pins import pwn_FL, pwm_FR, pwm_BL, pwm_BR
 from rio.pins import sonar_left, sonar_right
 from rio.pins import sonar_left, sonar_right
 from rio.pins import power
