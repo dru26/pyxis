@@ -3,7 +3,8 @@ import os, sys
 from math import pi
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from rio.pins import motor_FL, motor_FR, motor_BL, motor_BR, ir_FL, ir_BL, ir_FR, ir_BR
-from rio.pins import sonar_back, sonar_front, sonar_left, sonar_right
+from rio.pins import sonar_left, sonar_right
+from rio.pins import sonar_left, sonar_right
 from rio.pins import power
 from rio.pins import table1 as bforward
 from rio.pins import table2 as bbackward
@@ -83,6 +84,10 @@ def motor_stop():
 def forward(t, stop = True): # k is the time the robot will move in seconds
 	global DIRECTION
 	DIRECTION = FORWARD
+	pwm_FL.value = 0.8
+	pwm_FR.value = 0.8
+	pwm_BL.value = 0.8
+	pwm_BR.value = 0.8
 	updateESTOP()
 	print("Motor forward!")
 	if not ESTOP and POWER:
@@ -98,6 +103,10 @@ def backward(t, stop = True):
 	global DIRECTION
 	print("Motor backward!")
 	DIRECTION = BACKWARD
+	pwm_FL.value = 0.8
+	pwm_FR.value = 0.8
+	pwm_BL.value = 0.8
+	pwm_BR.value = 0.8
 	updateESTOP()
 	if not ESTOP and POWER:
 		motor_FL.backward()
@@ -112,6 +121,10 @@ def left(t, stop = True):
 	global DIRECTION
 	print("Motor left!")
 	DIRECTION = LEFT
+	pwm_FL.value = 1
+	pwm_FR.value = 1
+	pwm_BL.value = 1
+	pwm_BR.value = 1
 	updateESTOP()
 	if not ESTOP and POWER:
 	    motor_FL.forward()
@@ -126,6 +139,10 @@ def right(t, stop = True):
 	global DIRECTION
 	print("Motor right!")
 	DIRECTION = RIGHT
+	pwm_FL.value = 1
+	pwm_FR.value = 1
+	pwm_BL.value = 1
+	pwm_BR.value = 1
 	updateESTOP()
 	if not ESTOP and POWER:
 		motor_FL.backward()
@@ -258,6 +275,11 @@ bright.when_released = motor_stop
 
 # Preset path
 def presetPath():
+	sleep(5)
+	moveTo((100, 0))
+	sleep(5)
+	moveTo((0, 100))
+	'''
 	sleep(2)
 	moveTo((0, 100))
 	sleep(2)
@@ -266,8 +288,9 @@ def presetPath():
 	moveTo((0, 100))
 	sleep(2)
 	moveTo((0, 0))
+	'''
 
-bpath.when_pressed = lambda: presetPath
+bpath.when_pressed = presetPath
 
 # Monitors
 def estop(sonarDirection, sonar):
@@ -288,14 +311,14 @@ def unestop(sonarDirection, sonar):
 		ESTOP = False
 		print("UNESTOP!")
 
-sonar_right.when_in_range = lambda: estop(RIGHT, sonar_right)
-sonar_right.when_out_of_range = lambda: unestop(RIGHT, sonar_right)
-sonar_back.when_in_range = lambda: estop(BACKWARD, sonar_back)
-sonar_back.when_out_of_range = lambda: unestop(BACKWARD, sonar_back)
-sonar_left.when_in_range = lambda: estop(LEFT, sonar_left)
-sonar_left.when_out_of_range = lambda: unestop(LEFT, sonar_left)
-sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
-sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
+sonar_right.when_in_range = lambda: estop(FRONT, sonar_right)
+sonar_right.when_out_of_range = lambda: unestop(FRONT, sonar_right)
+#sonar_back.when_in_range = lambda: estop(BACKWARD, sonar_back)
+#sonar_back.when_out_of_range = lambda: unestop(BACKWARD, sonar_back)
+sonar_left.when_in_range = lambda: estop(FRONT, sonar_left)
+sonar_left.when_out_of_range = lambda: unestop(FRONT, sonar_left)
+#sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
+#sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
 def triggerIR():
 	print("IR Line detected; moving from", CURRENT_POSITION, "...")

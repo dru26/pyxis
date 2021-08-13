@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from rio.pins import sonar_right, sonar_back, sonar_left, sonar_front, motor_FL
+from rio.pins import sonar_right, sonar_left, motor_FL
 from rio.pins import motor_BR, motor_BL, motor_FR, ir_FL, ir_BL, ir_FR, ir_BR
 from rio.pins import power, table1, table2, table3, table4, table5, table6
 import asyncio
@@ -67,14 +67,6 @@ layout = [
 
     [sg.Text("", size = (40,1))],
     [
-        sg.Text("FRONT SONAR", size = (52,1), text_color = "yellow"),
-        sg.Text("BACK SONAR", size = (50,1), text_color = "yellow")
-    ],
-    [
-        sg.Text("Value: ", size = (10,1)), sg.Text(size = (40,1), key="-S1-", text_color = "red"),
-        sg.Text("Value: ", size = (10,1)), sg.Text(size = (40,1), key="-S2-", text_color = "red")
-    ],
-    [
         sg.Text("LEFT SONAR", size = (52,1), text_color = "yellow"),
         sg.Text("RIGHT SONAR", size = (50,1), text_color = "yellow")
     ],
@@ -114,8 +106,6 @@ if __name__ == "__main__":
 	    window["-M4-"].update(str(motor_BR.value))
 
 	    # Update the Sonar values
-	    window["-S1-"].update(sonar_front.value)
-	    window["-S2-"].update(sonar_back.value)
 	    window["-S3-"].update(sonar_left.value)
 	    window["-S4-"].update(sonar_right.value)
 
