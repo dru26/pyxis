@@ -10,6 +10,10 @@ STEP = 5
 
 FILE = str(pathlib.Path().absolute() / "examples/basic.txt")
 
+def setStep(v):
+    global STEP
+    STEP = int(v)
+
 def read(path):
     lines = []
     with open(path, 'r') as file:

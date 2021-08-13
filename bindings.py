@@ -1,8 +1,7 @@
 # ctypes_test.py
 import ctypes
 import pathlib
-from extra import STEP
-
+import extra
 WIDTH = 30
 FILE = str(pathlib.Path().absolute() / "examples/demo.txt")
 
@@ -34,29 +33,31 @@ if pos[:] == [2, 300]:
 MAP_PATH = "examples/maps/basic.txt"
 PATH = []
 
-clib.getPath.restype = None#ctypes.POINTER(ctypes.c_int)
+clib.getPath.restype = None #ctypes.POINTER(ctypes.c_int)
 clib.getPath.argtype = ctypes.POINTER(ctypes.c_int)
 def _destroy(path):
     clib.destructor(path)
 
 clib.getPath.restype = ctypes.POINTER(ctypes.c_int)
 clib.getPath.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_wchar_p)
-def findPath(start, end):
-    global PATH
-    print(str(pathlib.Path().absolute() / "examples/maps/basic.txt"))
-    cpath = clib.getPath(round(start[0]), round(start[1]), round(end[0]), round(end[1]), STEP, FILE);
+def findPath(start, end, file = None):
+    global PATH, FILE
+    if file == None:
+        file = FILE
+    cpath = clib.getPath(round(end[0]), round(end[1]), round(start[0]), round(start[1]), extra.STEP, file);
     i = cpath[0:1][0] + 1
     path = cpath[1:i]
     PATH = [(path[i], path[i+1]) for i in range(0, len(path), 2)]
-    print(PATH, "PATH")
-    PATH = []
+    # REmove the start pos
+    PATH.pop(0)
+    #print(PATH, "PATH")
     # Stop dem mem leaks
     _destroy(cpath)
 
 def nextPosition():
     if len(PATH) == 0:
         return None
-    return PATH.pop()
+    return PATH.pop(0)
 
 def hasPosition():
     if len(PATH) == 0:

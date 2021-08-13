@@ -23,7 +23,7 @@ public:
   void push_back(Position p, float w) {
     this->_path.push_back(p);
     // If this is FOR SURE blocked or it is
-    if (w < 0 || w == 1.0) {
+    if (w < 0 || w > 0.9) {
       this->_weight = -1;
       return;
     }

@@ -254,7 +254,7 @@ def moveTo(new_position):
 			motor_stop()
 		elif checkDirection(new_position) == BACK:
 			backward(0, False)
-			while CURRENT_POSITION[0] > new_position[0] - STEP:
+			while CURRENT_POSITION[0] > new_position[0] + STEP:
 				if ESTOP or not POWER:
 					motor_stop()
 					return False

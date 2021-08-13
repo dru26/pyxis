@@ -92,8 +92,8 @@ extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, int st
           // This is a memory leak unless we deal with it
           int* return_path = (int*)calloc(1 + (min_path.size() * 2),  sizeof(int));
           for (int i = min_path.size() - 1; i >= 0; --i) {
-            return_path[(i*2)+2] = x(min_path.get()[i]);
-            return_path[(i*2)+1] = y(min_path.get()[i]);
+            return_path[(i*2)+1] = x(min_path.get()[i]);
+            return_path[(i*2)+2] = y(min_path.get()[i]);
           }
           // The first arg of the array has its length
           return_path[0] = min_path.size() * 2;
