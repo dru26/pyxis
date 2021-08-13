@@ -20,8 +20,8 @@ ir_BL = LineSensor(20, sample_rate = 150, queue_len = 9)
 ir_BR = LineSensor(21, sample_rate = 150, queue_len = 9)
 
 # Ultrasonic Rangers #
-sonar_left = DistanceSensor(echo = 25, trigger = 7, max_distance = 1, threshold_distance = 0.25, partial = True)
-sonar_right = DistanceSensor(echo = 8, trigger = 1, max_distance = 1, threshold_distance = 0.25, partial = True)
+sonar_left = DistanceSensor(echo = 25, trigger = 7, max_distance = 1.5, threshold_distance = 0.5, partial = True)
+sonar_right = DistanceSensor(echo = 8, trigger = 1, max_distance = 1.5, threshold_distance = 0.5, partial = True)
 
 # Motor Control #
 motor_FL = Motor(2, 3, pwm = False)

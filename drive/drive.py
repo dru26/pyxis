@@ -240,23 +240,21 @@ def moveTo(new_position):
 		start_y = CURRENT_POSITION[1]
 		if checkDirection(new_position) == FRONT:
 			forward(0, False)
-			while abs(start_x - CURRENT_POSITION[0]) < STEP:
+			while abs(abs(start_x) - abs(CURRENT_POSITION[0])) < STEP:
 				if ESTOP or POWER:
 					return False
 				sleep(0.1)
 			motor_stop()
-			distance += getDistance(k1)
 		elif checkDirection(new_position) == BACK:
 			backward(0, False)
-			while abs(start_x - CURRENT_POSITION[0]) < STEP:
+			while abs(abs(start_x) - (CURRENT_POSITION[0])) < STEP:
 				if ESTOP or POWER:
 					return False
 				sleep(0.1)
 			motor_stop()
-			distance += getDistance(k1)
 		elif checkDirection(new_position) == RIGHT:
 			right(0, False)
-			while abs(start_y - CURRENT_POSITION[1]) < STEP:
+			while abs(abs(start_y) - abs(CURRENT_POSITION[1])) < STEP:
 				if ESTOP or POWER:
 					return False
 				sleep(0.1)
@@ -264,12 +262,11 @@ def moveTo(new_position):
 			distance += getDistance(k2)
 		elif checkDirection(new_position) == LEFT:
 			right(0, False)
-			while abs(start_y - CURRENT_POSITION[1]) < STEP:
+			while abs(abs(start_y) - abs(CURRENT_POSITION[1])) < STEP:
 				if ESTOP or POWER:
 					return False
 				sleep(0.1)
 			motor_stop()
-			distance += getDistance(k2)
 	return True
 
 # Button control
@@ -334,7 +331,7 @@ sonar_left.when_out_of_range = lambda: unestop(FRONT, sonar_left)
 #sonar_front.when_out_of_range = lambda: unestop(FRONT, sonar_front)
 
 def triggerIR(ir, v):
-	print("IR", ir.value, v);
+	#print("IR", ir.value, v);
 	global ir_n
 	ir_mutex.acquire()
 	ir_n += 0.25
