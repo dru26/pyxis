@@ -73,13 +73,16 @@ def updateESTOP():
 def off():
 	global POWER
 	print("Power OFF")
-	flushIR()
 	POWER = False
+	motor_stop()
+	flushIR()
+
 
 def on():
 	global POWER
 	print("Power ON")
 	POWER = True
+	motor_stop()
 	flushIR()
 	updateESTOP()
 
@@ -241,6 +244,7 @@ def moveTo(new_position):
 		if checkDirection(new_position) == FRONT:
 			forward(0, False)
 			while abs(abs(start_x) - abs(CURRENT_POSITION[0])) < STEP:
+				print(abs(abs(start_x) - abs(CURRENT_POSITION[0])), STEP, "FRONT")
 				if ESTOP or POWER:
 					return False
 				sleep(0.1)
@@ -248,6 +252,7 @@ def moveTo(new_position):
 		elif checkDirection(new_position) == BACK:
 			backward(0, False)
 			while abs(abs(start_x) - (CURRENT_POSITION[0])) < STEP:
+				print(abs(abs(start_x) - abs(CURRENT_POSITION[0])), STEP, "BACK")
 				if ESTOP or POWER:
 					return False
 				sleep(0.1)
