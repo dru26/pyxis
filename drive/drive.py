@@ -44,10 +44,12 @@ def updateESTOP():
 		ESTOP = False
 	if DIRECTION == FRONT and sonar_right.distance < sonar_right.threshold_distance:
 		ESTOP = True
+		motor_stop()
 	else:
 		ESTOP = False
 	if DIRECTION == FRONT and sonar_left.distance < sonar_left.threshold_distance:
 		ESTOP = True
+		motor_stop()
 	else:
 		ESTOP = False
 
@@ -292,6 +294,7 @@ def estop(sonarDirection, sonar):
 	global ESTOP
 	if sonarDirection == DIRECTION:
 		ESTOP = True
+		motor_stop()
 		print("ESTOPed!!")
 		sleep(3)
 		if sonar.distance < sonar.threshold_distance:
