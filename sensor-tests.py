@@ -79,67 +79,67 @@ layout = [
 
 if __name__ == "__main__":
 	# Create the window
-	window = sg.Window("Python ", layout)
+    window = sg.Window("Python ", layout, resize = True)
 
 	# Create an event loop
-	while True:
+    while True:
         event, values = window.read(100)
         # Update the Button values
-	    window["-B0-"].update(str(power.is_pressed))
-	    window["-B1-"].update(str(table1.is_pressed))
-	    window["-B2-"].update(str(table2.is_pressed))
-	    window["-B3-"].update(str(table3.is_pressed))
-	    window["-B4-"].update(str(table4.is_pressed))
-	    window["-B5-"].update(str(table5.is_pressed))
-	    window["-B6-"].update(str(table6.is_pressed))
+        window["-B0-"].update(str(power.is_pressed))
+        window["-B1-"].update(str(table1.is_pressed))
+        window["-B2-"].update(str(table2.is_pressed))
+        window["-B3-"].update(str(table3.is_pressed))
+        window["-B4-"].update(str(table4.is_pressed))
+        window["-B5-"].update(str(table5.is_pressed))
+        window["-B6-"].update(str(table6.is_pressed))
 
-	    # Update the IR sensor values
-	    window["-I1-"].update(str(ir_FL.value))
-	    window["-I2-"].update(str(ir_FR.value))
-	    window["-I3-"].update(str(ir_BL.value))
-	    window["-I4-"].update(str(ir_BR.value))
+        # Update the IR sensor values
+        window["-I1-"].update(str(ir_FL.value))
+        window["-I2-"].update(str(ir_FR.value))
+        window["-I3-"].update(str(ir_BL.value))
+        window["-I4-"].update(str(ir_BR.value))
 
-	    # Update the Motor values
-	    window["-M1-"].update(str(motor_FL.value))
-	    window["-M2-"].update(str(motor_FR.value))
-	    window["-M3-"].update(str(motor_BL.value))
-	    window["-M4-"].update(str(motor_BR.value))
+        # Update the Motor values
+        window["-M1-"].update(str(motor_FL.value))
+        window["-M2-"].update(str(motor_FR.value))
+        window["-M3-"].update(str(motor_BL.value))
+        window["-M4-"].update(str(motor_BR.value))
 
-	    # Update the Sonar values
-	    window["-S3-"].update(sonar_left.value)
-	    window["-S4-"].update(sonar_right.value)
+        # Update the Sonar values
+        window["-S3-"].update(sonar_left.value)
+        window["-S4-"].update(sonar_right.value)
 
-	    # Read Motor button presses
-	    if event == "BL Motor Power (Forward)":
-	        motor_BL.forward()
-	    elif event == "BL Motor Power (Backward)":
-	        motor_BL.backward()
-	    else:
-	        motor_BL.stop()
+        # Read Motor button presses
+        if event == "BL Motor Power (Forward)":
+            motor_BL.forward()
+        elif event == "BL Motor Power (Backward)":
+            motor_BL.backward()
+        else:
+            motor_BL.stop()
 
-	    if event == "FL Motor Power (Forward)":
-	        motor_FL.forward()
-	    elif event == "FL Motor Power (Backward)":
-	        motor_FL.backward()
-	    else:
-	        motor_FL.stop()
+        if event == "FL Motor Power (Forward)":
+            motor_FL.forward()
+        elif event == "FL Motor Power (Backward)":
+            motor_FL.backward()
+        else:
+            motor_FL.stop()
 
-	    if event == "BR Motor Power (Forward)":
-	        motor_BR.forward()
-	    elif event == "BR Motor Power (Backward)":
-	        motor_BR.backward()
-	    else:
-	        motor_BR.stop()
+        if event == "BR Motor Power (Forward)":
+            motor_BR.forward()
+        elif event == "BR Motor Power (Backward)":
+            motor_BR.backward()
+        else:
+            motor_BR.stop()
 
-	    if event == "FR Motor Power (Forward)":
-	        motor_FR.forward()
-	    elif event == "FR Motor Power (Backward)":
-	        motor_FR.backward()
-	    else:
-	        motor_FR.stop()
+        if event == "FR Motor Power (Forward)":
+            motor_FR.forward()
+        elif event == "FR Motor Power (Backward)":
+            motor_FR.backward()
+        else:
+            motor_FR.stop()
 
-	    # End program if user closes window
-	    if event == sg.WIN_CLOSED:
-	        break
+        # End program if user closes window
+        if event == sg.WIN_CLOSED:
+            break
 
-	window.close()
+    window.close()
