@@ -57,22 +57,22 @@ while True:
 
 	if state == 4: #setup routine
 		if forward_b.is_pressed:
-			drive.motor_forward(0, False)
+			drive.forward(0, False)
 			while forward_b.is_pressed:
 				pass
 			drive.motor_stop()
 		if backward_b.is_pressed:
-			drive.motor_backward(0, False)
+			drive.backward(0, False)
 			while backward_b.is_pressed:
 				pass
 			drive.motor_stop()
 		if left_b.is_pressed:
-			drive.motor_left(0, False)
+			drive.left(0, False)
 			while left_b.is_pressed:
 				pass
 			drive.motor_stop()
 		if right_b.is_pressed:
-			drive.motor_right(0, False)
+			drive.right(0, False)
 			while right_b.is_pressed:
 				pass
 			drive.motor_stop()
