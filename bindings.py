@@ -1,6 +1,7 @@
 # ctypes_test.py
 import ctypes
 import pathlib
+from extra import STEP
 
 WIDTH = 30
 FILE = str(pathlib.Path().absolute() / "examples/demo.txt")

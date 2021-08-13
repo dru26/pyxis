@@ -15,7 +15,7 @@ extern "C" void positionTest(int* pos) {
   pos[1] = 300;
 }
 
-enum Direction{LEFT = 0, RIGHT = 1, FORWARD = 2, BACKWARD = 3}
+enum Direction{LEFT = 0, RIGHT = 1, FORWARD = 2, BACKWARD = 3};
 
 //int x(const Position &p) { return p.first; }
 //int y(const Position &p) { return p.second; }

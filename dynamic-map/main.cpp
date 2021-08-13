@@ -12,9 +12,10 @@ g++ -shared -o clib.so clib.o
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <unistd.h>
 
-#include "map.h"
 #include "position.h"
+#include "map.h"
 #include "path.h"
 
 //typedef std::vector<Position> Path;
@@ -61,6 +62,9 @@ extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, int st
 
 		// Transform the dest coords to a multiple of step from start
 		dest_x = start_x + (round((dest_x - start_x) / step) * step);
+		dest_y = start_y + (round((dest_y - start_y) / step) * step);
+
+
 
     loadTestMap(p_map, std::string(path));
     Position dest = Position(dest_x, dest_y);
@@ -109,18 +113,17 @@ extern "C" int* getPath(int dest_x, int dest_y, int start_x, int start_y, int st
         }
         // Record this dest
         finished.insert(cur_dest);
-        /*
+/*
         std::cout << "====================" << std::endl;
         std::cout << min_path.size() << std::endl;
         for (int i = 0; i < min_path.size(); i++) {
           std::cout << min_path.get()[i] << std::endl;
-        }
-        usleep(1000 * 100);*/
+        }*/
     }
     // No valid path was found
     return NULL;
 }
-/*
+
 int main() {
-  getPath(0, 0, 2, 3, "/home/thethiefofstars/Code/GitHub/pyxis/examples/maps/basic.txt");
-}*/
+  getPath(21, 31, 0, 0, 5, "/home/thethiefofstars/Code/GitHub/pyxis/examples/maps/basic.txt");
+}

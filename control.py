@@ -1,5 +1,4 @@
 import drive
-import sonar
 import bindings
 import extra
 from drive.drive import ESTOP
