@@ -24,7 +24,8 @@ n = 5
 # radius of the wheels in cm
 r = 4.8
 # k value of going forward
-k1 = 1.5
+k1 = 1.05
+k3 = 1.3
 # k value of going side to side
 k2 = 1
 
@@ -45,7 +46,7 @@ def flushIR():
 	if DIRECTION == FRONT:
 		CURRENT_POSITION = (CURRENT_POSITION[0] + (ir_n * getDistance(k1)), CURRENT_POSITION[1])
 	elif DIRECTION == BACK:
-		CURRENT_POSITION = (CURRENT_POSITION[0] - (ir_n * getDistance(k1)), CURRENT_POSITION[1])
+		CURRENT_POSITION = (CURRENT_POSITION[0] - (ir_n * getDistance(k3)), CURRENT_POSITION[1])
 	elif DIRECTION == RIGHT:
 		CURRENT_POSITION = (CURRENT_POSITION[0], CURRENT_POSITION[1] + (ir_n * getDistance(k2)))
 	elif DIRECTION == LEFT:
