@@ -246,6 +246,7 @@ def moveTo(new_position):
 			while abs(abs(start_x) - abs(CURRENT_POSITION[0])) < STEP:
 				print(abs(abs(start_x) - abs(CURRENT_POSITION[0])), STEP, "FRONT")
 				if ESTOP or POWER:
+					motor_stop()
 					return False
 				sleep(0.1)
 			motor_stop()
@@ -254,6 +255,7 @@ def moveTo(new_position):
 			while abs(abs(start_x) - (CURRENT_POSITION[0])) < STEP:
 				print(abs(abs(start_x) - abs(CURRENT_POSITION[0])), STEP, "BACK")
 				if ESTOP or POWER:
+					motor_stop()
 					return False
 				sleep(0.1)
 			motor_stop()
@@ -261,6 +263,7 @@ def moveTo(new_position):
 			right(0, False)
 			while abs(abs(start_y) - abs(CURRENT_POSITION[1])) < STEP:
 				if ESTOP or POWER:
+					motor_stop()
 					return False
 				sleep(0.1)
 			motor_stop()
@@ -269,9 +272,11 @@ def moveTo(new_position):
 			right(0, False)
 			while abs(abs(start_y) - abs(CURRENT_POSITION[1])) < STEP:
 				if ESTOP or POWER:
+					motor_stop()
 					return False
 				sleep(0.1)
 			motor_stop()
+	motor_stop()
 	return True
 
 # Button control

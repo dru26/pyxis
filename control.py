@@ -77,11 +77,11 @@ while True:
 			drive.motor_stop()
 		elif path_b.is_pressed:
 
-			bpath.wait_for_release()
+			path_b.wait_for_release()
 			print("start")
-			moveTo((100, 0))
+			drive.moveTo((100, 0))
 
-			moveTo((0, 100))
+			drive.moveTo((0, 100))
 			print("end")
 		if table_b.is_pressed:
 			table_position = drive.CURRENT_POSITION
