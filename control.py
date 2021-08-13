@@ -56,19 +56,26 @@ while True:
 		state = 1
 
 	if state == 4: #setup routine
-		if forward_b.is_pressed():
-			sleep(1)
-			drive.motor_forward(1)
-		if backward_b.is_pressed():
-			sleep(1)
-			drive.motor_backward(1)
-		if left_b.is_pressed():
-			sleep(1)
-			drive.motor_left(1)
-		if right_b.is_pressed():
-			sleep(1)
-			drive.motor_right(1)
-		if table_b.is_pressed():
-			sleep(1)
+		if forward_b.is_pressed:
+			drive.motor_forward(0, False)
+			while forward_b.is_pressed:
+				pass
+			drive.motor_stop()
+		if backward_b.is_pressed:
+			drive.motor_backward(0, False)
+			while backward_b.is_pressed:
+				pass
+			drive.motor_stop()
+		if left_b.is_pressed:
+			drive.motor_left(0, False)
+			while left_b.is_pressed:
+				pass
+			drive.motor_stop()
+		if right_b.is_pressed:
+			drive.motor_right(0, False)
+			while right_b.is_pressed:
+				pass
+			drive.motor_stop()
+		while table_b.is_pressed:
 			table_position = drive.CURRENT_POSITION
 			state = 3
