@@ -16,6 +16,7 @@ flag = False
 state = 4
 retry = 0
 while True:
+	sleep(0.1)
 	if state == 0: #wait to go to table
 		print("STATE 0")
 		table_b.wait_for_press()
