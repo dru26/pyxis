@@ -49,11 +49,11 @@ def updateESTOP():
 		ESTOP = True
 	else:
 		ESTOP = False
-	if DISTANCE == FRONT and sonar_front.distance < sonar_front.threshold_distance:
+	if DISTANCE == FORWARD and sonar_front.distance < sonar_front.threshold_distance:
 		ESTOP = True
 	else:
 		ESTOP = False
-	if DISTANCE == BACK and sonar_back.distance < sonar_back.threshold_distance:
+	if DISTANCE == BACKWARD and sonar_back.distance < sonar_back.threshold_distance:
 		ESTOP = True
 	else:
 		ESTOP = False
@@ -311,12 +311,12 @@ def unestop(sonarDirection, sonar):
 		ESTOP = False
 		print("UNESTOP!")
 
-sonar_right.when_in_range = lambda: estop(FRONT, sonar_right)
-sonar_right.when_out_of_range = lambda: unestop(FRONT, sonar_right)
+sonar_right.when_in_range = lambda: estop(FORWARD, sonar_right)
+sonar_right.when_out_of_range = lambda: unestop(FORWARD, sonar_right)
 #sonar_back.when_in_range = lambda: estop(BACKWARD, sonar_back)
 #sonar_back.when_out_of_range = lambda: unestop(BACKWARD, sonar_back)
-sonar_left.when_in_range = lambda: estop(FRONT, sonar_left)
-sonar_left.when_out_of_range = lambda: unestop(FRONT, sonar_left)
+sonar_left.when_in_range = lambda: estop(FORWARD, sonar_left)
+sonar_left.when_out_of_range = lambda: unestop(FORWARD, sonar_left)
 #sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
 #sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
