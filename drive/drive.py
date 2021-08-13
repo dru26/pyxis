@@ -202,7 +202,7 @@ check if new_position[0] - CURRENT_POSITION[0] + new_position[1] - CURRENT_POSIT
 '''
 def moveTo(new_position):
 	global CURRENT_POSITION
-	print("Moving to ", new_position)
+	print("Moving to", new_position)
 	'''
 	if the speed of the motor is 0.2cm/s, we can just let motor move 5 seconds to reach the destination
 	(since we can assume that each position is 1cm apart in a cardinal direction)
@@ -227,6 +227,7 @@ def moveTo(new_position):
 		if checkDirection(new_position) == FRONT:
 			forward(0, False)
 			while abs(start_x - CURRENT_POSITION[0]) < STEP:
+				print(abs(start_x - CURRENT_POSITION[0]))
 				if ESTOP or POWER:
 					return False
 			motor_stop()
@@ -234,6 +235,7 @@ def moveTo(new_position):
 		elif checkDirection(new_position) == BACK:
 			backward(0, False)
 			while abs(start_x - CURRENT_POSITION[0]) < STEP:
+				print(abs(start_x - CURRENT_POSITION[0]))
 				if ESTOP or POWER:
 					return False
 			motor_stop()
@@ -300,6 +302,7 @@ def estop(sonarDirection, sonar):
 			ESTOP = False
 
 def unestop(sonarDirection, sonar):
+	global ESTOP
 	if sonarDirection == DIRECTION and ESTOP == True:
 		ESTOP = False
 		print("UNESTOP!")

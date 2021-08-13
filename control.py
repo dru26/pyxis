@@ -16,7 +16,6 @@ flag = False
 state = 4
 retry = 0
 while True:
-
 	if state == 0: #wait to go to table
 		print("STATE 0")
 		table_b.wait_for_press()
@@ -61,23 +60,19 @@ while True:
 	if state == 4: #setup routine
 		if forward_b.is_pressed:
 			drive.forward(0, False)
-			while forward_b.is_pressed:
-				pass
+			forward_b.wait_for_release()
 			drive.motor_stop()
 		if backward_b.is_pressed:
 			drive.backward(0, False)
-			while backward_b.is_pressed:
-				pass
+			backward_b.wait_for_release()
 			drive.motor_stop()
 		if left_b.is_pressed:
 			drive.left(0, False)
-			while left_b.is_pressed:
-				pass
+			left_b.wait_for_release()
 			drive.motor_stop()
 		if right_b.is_pressed:
 			drive.right(0, False)
-			while right_b.is_pressed:
-				pass
+			right_b.wait_for_release()
 			drive.motor_stop()
 		while table_b.is_pressed:
 			table_position = drive.CURRENT_POSITION

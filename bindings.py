@@ -48,8 +48,8 @@ def findPath(start, end):
     i = cpath[0:1][0] + 1
     path = cpath[1:i]
     PATH = [(path[i], path[i+1]) for i in range(0, len(path), 2)]
-    print(path, "PATH")
-    path = []
+    print(PATH, "PATH")
+    PATH = []
     # Stop dem mem leaks
     _destroy(cpath)
 
