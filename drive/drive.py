@@ -320,8 +320,8 @@ sonar_left.when_out_of_range = lambda: unestop(FRONT, sonar_left)
 #sonar_front.when_in_range = lambda: estop(FORWARD, sonar_front)
 #sonar_front.when_out_of_range = lambda: unestop(FORWARD, sonar_front)
 
-def triggerIR():
-	print("IR");
+def triggerIR(ir):
+	print("IR", ir.value);
 	global ir_n
 	ir_mutex.acquire()
 	ir_n += 0.25
