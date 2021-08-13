@@ -30,7 +30,7 @@ k2 = 0.45
 
 ESTOP = False
 POWER = power.is_pressed
-MODE = "IR"
+MODE = "VELOCITY"
 #MODE = "VELOCITY"
 
 SPEED = 0.2
@@ -227,16 +227,20 @@ def moveTo(new_position):
 	if MODE == "VELOCITY":
 		if checkDirection(new_position) == FRONT:
 			forward(DELTA)
-			return
+			motor_stop()
+			return True
 		if checkDirection(new_position) == BACK:
 			backward(DELTA)
-			return
+			motor_stop()
+			return True
 		if checkDirection(new_position) == RIGHT:
 			right(DELTA)
-			return
+			motor_stop()
+			return True
 		if checkDirection(new_position) == LEFT:
 			left(DELTA)
-			return
+			motor_stop()
+			return True
 	'''Use odometry to determine where we are'''
 	if MODE == "IR":
 		start_x = CURRENT_POSITION[0]
