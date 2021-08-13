@@ -80,12 +80,8 @@ while True:
 			path_b.wait_for_release()
 			print("start")
 			sleep(0.5)
-			for i in range(20):
-				drive.moveTo((100, 0))
 			print("temp")
 			sleep(1)
-			for i in range(20):
-				drive.moveTo((0, 0))
 			sleep(0.5)
 			print("end")
 		if table_b.is_pressed:
