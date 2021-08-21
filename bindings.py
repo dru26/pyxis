@@ -38,20 +38,24 @@ clib.getPath.argtype = ctypes.POINTER(ctypes.c_int)
 def _destroy(path):
     clib.destructor(path)
 
+# Set binding types (return and argument)
 clib.getPath.restype = ctypes.POINTER(ctypes.c_int)
 clib.getPath.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_wchar_p)
+# Make the Pythonic function
 def findPath(start, end, file = None):
     global PATH, FILE
     if file == None:
         file = FILE
+    # Call the C++ clib.getPath function and capture its return value 
     cpath = clib.getPath(round(end[0]), round(end[1]), round(start[0]), round(start[1]), extra.STEP, file);
+    # Parse the return value
     i = cpath[0:1][0] + 1
     path = cpath[1:i]
     PATH = [(path[i], path[i+1]) for i in range(0, len(path), 2)]
-    # REmove the start pos
+    # Remove the starting position
     PATH.pop(0)
     #print(PATH, "PATH")
-    # Stop dem mem leaks
+    # Stop the memory leaks
     _destroy(cpath)
 
 def nextPosition():
